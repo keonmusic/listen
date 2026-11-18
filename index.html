@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rogue Industries Music</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Rajdhani:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#04090a;--panel:#0a1618;--line:#16313a;--text:#d8f0e8;--dim:#78a095;--acc:#66cdaa;--acc2:#3fb6c9;--cut:9px;
+--ch:polygon(var(--cut) 0,100% 0,100% calc(100% - var(--cut)),calc(100% - var(--cut)) 100%,0 100%,0 var(--cut));color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--text);font:500 17px/1.35 Rajdhani,system-ui,sans-serif;height:100dvh;display:grid;
+grid-template:"side main" minmax(0,1fr) "bar bar" auto/236px minmax(0,1fr);overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+small{color:var(--dim);font-size:.85em}
+:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.side{grid-area:side;padding:24px 14px;overflow:auto;border-right:1px solid var(--line)}
+.brand{font:600 28px/1 'Cormorant Garamond',Georgia,serif;margin:0 8px 22px}
+#pls{display:flex;flex-direction:column;gap:2px}
+.pls{display:flex;justify-content:space-between;gap:8px;padding:9px 12px;text-align:left;color:var(--dim);clip-path:var(--ch)}
+.pls:hover{color:var(--text)}
+.pls.on{background:var(--panel);color:var(--acc)}
+main{grid-area:main;overflow:auto;padding:30px 28px 20px}
+.hd{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:18px}
+h1{font:600 clamp(34px,6vw,56px)/1 'Cormorant Garamond',Georgia,serif}
+.go{background:var(--acc);color:#04120d;padding:8px 18px;display:flex;gap:6px;align-items:center;font-weight:600;clip-path:var(--ch)}
+#rows{list-style:none;padding:0}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;align-items:center;border-bottom:1px solid var(--line)}
+.play{display:grid;grid-template-columns:34px minmax(0,1fr);align-items:center;text-align:left;padding:10px 4px}
+.n{color:var(--dim);display:grid;place-items:center}
+.tt{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row.on .tt,.row.on .n{color:var(--acc)}
+.d{color:var(--dim);padding:0 10px;font-variant-numeric:tabular-nums}
+.mini{width:36px;height:36px;display:grid;place-items:center;color:var(--dim)}
+.mini:hover{color:var(--acc)}
+.empty{padding:20px 4px;color:var(--dim)}
+.bar{grid-area:bar;background:var(--panel);border-width:1px 0 0;border-style:solid;border-image:linear-gradient(90deg,#66cdaa,#3fb6c9,#9fb4ff,#66cdaa) 1;
+padding:10px 18px calc(10px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr minmax(280px,540px) 1fr;gap:18px;align-items:center}
+.now{display:flex;gap:12px;align-items:center;min-width:0}
+.now>div:last-child{min-width:0}
+#art{width:46px;height:46px;flex:none;background:linear-gradient(135deg,#0e3b3a,#1c3f66) center/cover;clip-path:var(--ch)}
+.ctl{display:flex;justify-content:center;align-items:center;gap:10px}
+.ib{width:38px;height:38px;display:grid;place-items:center;color:var(--dim);position:relative}
+.ib:hover{color:var(--text)}.ib.on{color:var(--acc)}
+#lp[data-m=one]::after{content:'1';position:absolute;right:5px;bottom:4px;font-size:11px;font-weight:600}
+#pp{width:46px;height:46px;background:var(--acc);color:#04120d;display:grid;place-items:center;clip-path:var(--ch)}
+.sk{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;color:var(--dim);font-size:.9em;font-variant-numeric:tabular-nums}
+.right{display:flex;justify-content:flex-end;align-items:center;gap:8px;color:var(--dim)}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:20px;cursor:pointer;width:100%}
+#vol{width:96px}
+input[type=range]::-webkit-slider-runnable-track{height:4px;background:linear-gradient(90deg,var(--acc),var(--acc2),#9fb4ff) 0 0/var(--p,0%) 100% no-repeat,#1a2f33}
+input[type=range]::-moz-range-track{height:4px;background:#1a2f33}
+input[type=range]::-moz-range-progress{height:4px;background:var(--acc)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;margin-top:-4.5px;background:var(--text);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border:0;border-radius:0;background:var(--text);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+#qp{position:fixed;top:0;right:0;bottom:0;width:min(380px,100%);background:var(--panel);border-left:1px solid var(--line);transform:translateX(100%);
+transition:transform .2s;padding:18px;overflow:auto;z-index:5}
+#qp.open{transform:none}
+#qp h3{font:600 24px/1.2 'Cormorant Garamond',Georgia,serif;margin:18px 0 6px;display:flex;justify-content:space-between;align-items:baseline}
+#qp h3:first-child{margin-top:0}
+.lnk{color:var(--acc);font-size:15px}
+.qi{display:flex;align-items:center;border-bottom:1px solid var(--line)}
+.qt{flex:1;min-width:0;text-align:left;padding:8px 2px}
+#toast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%);background:#0f2428;padding:10px 16px;max-width:90%;clip-path:var(--ch);
+opacity:0;pointer-events:none;transition:opacity .2s;z-index:9;text-align:center}
+#toast.show{opacity:1}
+@media(max-width:760px){
+body{grid-template:"side" auto "main" minmax(0,1fr) "bar" auto/minmax(0,1fr)}
+.side{display:flex;align-items:center;gap:10px;padding:10px 14px;border-right:0;border-bottom:1px solid var(--line);overflow-x:auto}
+.brand{margin:0 6px 0 0;font-size:22px;white-space:nowrap}
+#pls{flex-direction:row;gap:6px}
+.pls{white-space:nowrap;gap:6px}
+main{padding:20px 14px 12px}
+.bar{grid-template-columns:minmax(0,1fr) auto;gap:6px 12px}
+.mid{grid-column:1/-1;grid-row:2}
+#vol,.vl{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-prev" viewBox="0 0 24 24"><path d="M6 6h2v12H6zM20 6v12L9.5 12z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-next" viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM4 6v12l10.5-6z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></symbol>
+<symbol id="i-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
+<symbol id="i-queue" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-top" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+<symbol id="i-vol" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7"/></symbol>
+</defs></svg>
+
+<aside class="side"><div class="brand">Rogue Industries</div><nav id="pls" aria-label="Playlists"></nav></aside>
+
+<main>
+  <div class="hd">
+    <div><h1 id="title"></h1><small id="count"></small></div>
+    <button class="go" id="go"><svg class="ic"><use href="#i-play"/></svg>Play</button>
+  </div>
+  <ul id="rows"></ul>
+</main>
+
+<footer class="bar">
+  <div class="now"><div id="art"></div><div><b class="tt" id="nt"></b><small class="tt" id="na"></small></div></div>
+  <div class="mid">
+    <div class="ctl">
+      <button class="ib" id="sh"><svg class="ic"><use href="#i-shuffle"/></svg></button>
+      <button class="ib" id="pv" aria-label="Previous"><svg class="ic"><use href="#i-prev"/></svg></button>
+      <button id="pp"></button>
+      <button class="ib" id="nx" aria-label="Next"><svg class="ic"><use href="#i-next"/></svg></button>
+      <button class="ib" id="lp"><svg class="ic"><use href="#i-repeat"/></svg></button>
+    </div>
+    <div class="sk"><span id="tc">0:00</span><input id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek"><span id="td">0:00</span></div>
+  </div>
+  <div class="right">
+    <svg class="ic vl"><use href="#i-vol"/></svg><input id="vol" type="range" min="0" max="1" step="0.01" aria-label="Volume">
+    <button class="ib" id="qb" aria-label="Open queue"><svg class="ic"><use href="#i-queue"/></svg></button>
+  </div>
+</footer>
+
+<aside id="qp" inert aria-label="Queue">
+  <button class="ib" id="qx" aria-label="Close queue" style="float:right"><svg class="ic"><use href="#i-x"/></svg></button>
+  <div id="qbody"></div>
+</aside>
+<div id="toast" role="status"></div>
+
+<script>
+/* ---------- EDIT THIS PART ----------
+   For each track: Dropbox > Share > Create link ("Anyone with the link") > Copy link, then paste the whole link as `url`.
+   Both new (/scl/fi/...) and old (/s/...) Dropbox links work; the page converts them to direct-play links itself.
+   `dur` and `art` are optional (art = a cover image URL, e.g. a file in this repo like "art/lux.jpg"). */
+const SITE = { artist: 'Keon Wu' };
+const LIBRARY = [
+  { name: 'Playlist one', tracks: [
+    { title: 'Track title', url: 'https://www.dropbox.com/scl/fi/xxxxxxxx/track-one.mp3?rlkey=xxxxxxxx&dl=0' },
+    { title: 'Another track', url: 'https://www.dropbox.com/scl/fi/xxxxxxxx/track-two.mp3?rlkey=xxxxxxxx&dl=0' }
+  ]},
+  { name: 'Playlist two', tracks: [
+    { title: 'Third track', url: 'https://www.dropbox.com/scl/fi/xxxxxxxx/track-three.mp3?rlkey=xxxxxxxx&dl=0' }
+  ]}
+];
+/* ---------- END OF EDITABLE PART ---------- */
+
+const $ = s => document.querySelector(s), a = new Audio(), seek = $('#seek'), vol = $('#vol'), qp = $('#qp');
+a.preload = 'metadata';
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = s => isFinite(s) ? Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0') : '0:00';
+const ic = n => `<svg class="ic"><use href="#i-${n}"/></svg>`;
+const direct = u => { try { const x = new URL(u); if (/(^|\.)dropbox\.com$/.test(x.hostname)) { x.searchParams.delete('dl'); x.searchParams.set('raw', '1'); } return x.href; } catch { return u; } };
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('ri.' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('ri.' + k, JSON.stringify(v)); } catch {} }
+};
+const shuf = arr => { const r = arr.slice(); for (let i = r.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [r[i], r[j]] = [r[j], r[i]]; } return r; };
+let toastT; const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 3500); };
+
+const all = [...new Map(LIBRARY.flatMap(p => p.tracks).map(t => [t.url, t])).values()];
+const lists = [{ name: 'All tracks', tracks: all }, ...LIBRARY];
+let view = 0, src = [], ctx = [], ci = -1, ctxName = '', queue = [], hist = [], cur = null, scrubbing = false;
+let shuffle = store.get('shuffle', false), loop = store.get('loop', 'off');
+a.volume = store.get('vol', 0.8); a.loop = loop === 'one'; vol.value = a.volume; vol.style.setProperty('--p', a.volume * 100 + '%');
+
+/* ---------- playback ---------- */
+function build() {
+  const rest = src.filter(t => t.url !== cur.url);
+  ctx = shuffle ? [cur, ...shuf(rest)] : src.slice();
+  ci = ctx.findIndex(t => t.url === cur.url);
+}
+function playFrom(list, i) {
+  const t = list[i]; src = list.slice(); ctxName = lists[view].name;
+  ctx = shuffle ? [t, ...shuf(src.filter(x => x !== t))] : src.slice(); ci = shuffle ? 0 : i;
+  start(t, true);
+}
+function start(t, push) {
+  if (push && cur) hist.push(cur);
+  cur = t; a.src = direct(t.url); a.play().catch(() => {});
+  document.title = t.title + ' – Rogue Industries Music';
+  if ('mediaSession' in navigator) navigator.mediaSession.metadata = new MediaMetadata({ title: t.title, artist: t.artist || SITE.artist, album: ctxName, artwork: t.art ? [{ src: t.art }] : [] });
+  ui(); renderQ();
+}
+function next(auto) {
+  let t;
+  if (queue.length) t = queue.shift();
+  else if (ctx.length) {
+    let i = ci + 1;
+    if (i >= ctx.length) { if (auto && loop !== 'all') { a.pause(); a.currentTime = 0; ui(); return; } i = 0; }
+    ci = i; t = ctx[i];
+  }
+  if (t) start(t, true);
+}
+function prev() {
+  if (a.currentTime > 3 || !hist.length) { a.currentTime = 0; return; }
+  const t = hist.pop(), i = ctx.findIndex(x => x.url === t.url);
+  if (i > -1) ci = i;
+  start(t, false);
+}
+function toggle() {
+  if (!cur) { if (queue.length) next(); else if (lists[view].tracks.length) playFrom(lists[view].tracks, 0); return; }
+  a.paused ? a.play().catch(() => {}) : a.pause();
+}
+function qAdd(t, top) { top ? queue.unshift(t) : queue.push(t); toast(top ? 'Playing next: ' + t.title : 'Added to queue: ' + t.title); renderQ(); }
+
+/* ---------- rendering ---------- */
+function renderSide() {
+  $('#pls').innerHTML = lists.map((l, i) => `<button class="pls${i === view ? ' on' : ''}" data-v="${i}">${esc(l.name)}<small>${l.tracks.length}</small></button>`).join('');
+}
+function renderList() {
+  const L = lists[view].tracks;
+  $('#title').textContent = lists[view].name;
+  $('#count').textContent = L.length + (L.length === 1 ? ' track' : ' tracks');
+  $('#rows').innerHTML = L.length ? L.map((t, i) => {
+    const on = cur && cur.url === t.url;
+    return `<li class="row${on ? ' on' : ''}" data-i="${i}"><button class="play" data-a="play"><span class="n">${on ? ic(a.paused ? 'play' : 'pause') : i + 1}</span>` +
+      `<span><span class="tt">${esc(t.title)}</span><small class="tt">${esc(t.artist || SITE.artist)}</small></span></button>` +
+      `<span class="d">${esc(t.dur || '')}</span>` +
+      `<button class="mini" data-a="top" aria-label="Play next" title="Play next">${ic('top')}</button>` +
+      `<button class="mini" data-a="add" aria-label="Add to queue" title="Add to queue">${ic('plus')}</button></li>`;
+  }).join('') : '<li class="empty">No tracks yet. Add some to the LIBRARY block at the top of index.html.</li>';
+}
+function renderQ() {
+  const up = ctx.slice(ci + 1, ci + 9), item = (t, attr, rm) =>
+    `<div class="qi"><button class="qt" ${attr}><span class="tt">${esc(t.title)}</span><small class="tt">${esc(t.artist || SITE.artist)}</small></button>` +
+    (rm ? `<button class="mini" data-r="${rm}" aria-label="Remove from queue">${ic('x')}</button>` : '') + '</div>';
+  $('#qbody').innerHTML =
+    (cur ? `<h3>Now playing</h3><div class="qi"><span class="qt"><span class="tt">${esc(cur.title)}</span></span></div>` : '') +
+    `<h3>Queue${queue.length ? '<button class="lnk" id="qc">Clear</button>' : ''}</h3>` +
+    (queue.length ? queue.map((t, i) => item(t, `data-q="${i}"`, i + 1)).join('') : '<p class="empty">Nothing queued. Use the + button on any track.</p>') +
+    (up.length ? `<h3>Next from ${esc(ctxName)}</h3>` + up.map((t, i) => item(t, `data-u="${ci + 1 + i}"`)).join('') : '');
+}
+function ui() {
+  const p = a.paused, lm = { off: 'Loop: off', all: 'Loop: all tracks', one: 'Loop: this track' }[loop];
+  $('#pp').innerHTML = ic(p ? 'play' : 'pause'); $('#pp').setAttribute('aria-label', p ? 'Play' : 'Pause');
+  $('#sh').classList.toggle('on', shuffle); $('#sh').setAttribute('aria-label', shuffle ? 'Shuffle: on' : 'Shuffle: off');
+  $('#lp').classList.toggle('on', loop !== 'off'); $('#lp').dataset.m = loop; $('#lp').setAttribute('aria-label', lm); $('#lp').title = lm;
+  $('#nt').textContent = cur ? cur.title : 'Nothing playing';
+  $('#na').textContent = cur ? (cur.artist || SITE.artist) : 'Pick a track to start';
+  $('#art').style.backgroundImage = cur && cur.art ? `url("${cur.art}")` : '';
+  renderList();
+}
+function openQ(o) { qp.classList.toggle('open', o); qp.inert = !o; if (o) $('#qx').focus(); }
+
+/* ---------- events ---------- */
+$('#pls').onclick = e => { const b = e.target.closest('[data-v]'); if (!b) return; view = +b.dataset.v; renderSide(); renderList(); $('main').scrollTop = 0; };
+$('#go').onclick = () => { const L = lists[view].tracks; if (L.length) playFrom(L, shuffle ? Math.random() * L.length | 0 : 0); };
+$('#rows').onclick = e => {
+  const b = e.target.closest('button[data-a]'); if (!b) return;
+  const L = lists[view].tracks, i = +b.closest('li').dataset.i;
+  b.dataset.a === 'play' ? playFrom(L, i) : qAdd(L[i], b.dataset.a === 'top');
+};
+$('#qbody').onclick = e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.id === 'qc') { queue = []; renderQ(); }
+  else if (b.dataset.r) { queue.splice(b.dataset.r - 1, 1); renderQ(); }
+  else if (b.dataset.q !== undefined) start(queue.splice(+b.dataset.q, 1)[0], true);
+  else if (b.dataset.u !== undefined) { ci = +b.dataset.u; start(ctx[ci], true); }
+};
+$('#pp').onclick = toggle; $('#nx').onclick = () => next(false); $('#pv').onclick = prev;
+$('#sh').onclick = () => { shuffle = !shuffle; store.set('shuffle', shuffle); if (cur) build(); ui(); renderQ(); };
+$('#lp').onclick = () => { loop = { off: 'all', all: 'one', one: 'off' }[loop]; store.set('loop', loop); a.loop = loop === 'one'; ui(); };
+$('#qb').onclick = () => openQ(true); $('#qx').onclick = () => openQ(false);
+vol.oninput = () => { a.volume = +vol.value; vol.style.setProperty('--p', vol.value * 100 + '%'); store.set('vol', a.volume); };
+
+a.onplay = a.onpause = ui;
+a.onended = () => next(true);
+a.onerror = () => { if (cur) toast('Couldn’t load “' + cur.title + '”. Check its Dropbox link is shared with anyone who has the link.'); };
+a.onloadedmetadata = () => { $('#td').textContent = fmt(a.duration); if (cur && !cur.dur && isFinite(a.duration)) { cur.dur = fmt(a.duration); renderList(); } };
+a.ontimeupdate = () => {
+  if (!scrubbing) { const p = a.duration ? a.currentTime / a.duration * 1000 : 0; seek.value = p; seek.style.setProperty('--p', p / 10 + '%'); $('#tc').textContent = fmt(a.currentTime); }
+};
+seek.oninput = () => { scrubbing = true; seek.style.setProperty('--p', seek.value / 10 + '%'); $('#tc').textContent = fmt(seek.value / 1000 * a.duration); };
+seek.onchange = () => { if (a.duration) a.currentTime = seek.value / 1000 * a.duration; scrubbing = false; };
+
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') openQ(false);
+  if (e.target !== document.body) return;
+  if (e.code === 'Space') { e.preventDefault(); toggle(); }
+  else if (e.key === 'ArrowRight') a.currentTime += 5;
+  else if (e.key === 'ArrowLeft') a.currentTime -= 5;
+});
+if ('mediaSession' in navigator) {
+  const h = { play: () => a.play(), pause: () => a.pause(), previoustrack: prev, nexttrack: () => next(false) };
+  for (const k in h) { try { navigator.mediaSession.setActionHandler(k, h[k]); } catch {} }
+}
+
+renderSide(); ui(); renderQ();
+</script>
+</body>
+</html>
