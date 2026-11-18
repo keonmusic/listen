@@ -136,14 +136,18 @@ main{padding:20px 14px 12px}
    Both new (/scl/fi/...) and old (/s/...) Dropbox links work; the page converts them to direct-play links itself.
    `dur` and `art` are optional (art = a cover image URL, e.g. a file in this repo like "art/lux.jpg"). */
 const SITE = { artist: 'Keon Wu' };
+/* Each track is defined once here, then listed in as many playlists as you like below. */
+const T = {
+  void:    { title: 'Void', url: 'https://www.dropbox.com/scl/fi/2inp8puzke66t1ylxi5gf/Void.mp3?rlkey=exw5q1vtkouqtjojj1z4rki0l&st=v16yb7fo&dl=0' },
+  spider:  { title: 'It’s big... AND HAS SPIDER LEGS', url: 'https://www.dropbox.com/scl/fi/w0a9ruozg2h3ai12a77tq/It-s-big...-AND-HAS-SPIDER-LEGS.mp3?rlkey=2pzetrbnyjmiwqwdg54km20ew&st=pcck4d84&dl=0' },
+  ash:     { title: 'Ash’s Theme', url: 'https://www.dropbox.com/scl/fi/97fttqtb4v3tp5rmnwy1g/Ash-s-Theme.mp3?rlkey=zsddie3mpys7bduiskvifnq9z&st=76irv6cu&dl=0' },
+  kothari: { title: 'Kothari', url: 'https://www.dropbox.com/scl/fi/ioh1tnlg27czjtox9skk1/Kothari.mp3?rlkey=4s287ipekvnmkbkvqidvri6wa&st=79338y8p&dl=0' }
+};
 const LIBRARY = [
-  { name: 'Playlist one', tracks: [
-    { title: 'Track title', url: 'https://www.dropbox.com/scl/fi/xxxxxxxx/track-one.mp3?rlkey=xxxxxxxx&dl=0' },
-    { title: 'Another track', url: 'https://www.dropbox.com/scl/fi/xxxxxxxx/track-two.mp3?rlkey=xxxxxxxx&dl=0' }
-  ]},
-  { name: 'Playlist two', tracks: [
-    { title: 'Third track', url: 'https://www.dropbox.com/scl/fi/xxxxxxxx/track-three.mp3?rlkey=xxxxxxxx&dl=0' }
-  ]}
+  { name: 'Lux Novus',    tracks: [T.void, T.spider, T.ash, T.kothari] },
+  { name: 'Fight tracks', tracks: [T.spider] },
+  { name: 'Motifs',       tracks: [T.void, T.ash] },
+  { name: 'Ambient',      tracks: [T.kothari] }
 ];
 /* ---------- END OF EDITABLE PART ---------- */
 
