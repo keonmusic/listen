@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Track code helper</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="/RI%20logo%20nobackground.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Rajdhani:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#04090a;--panel:#0a1618;--code:#061012;--line:#16313a;--text:#d8f0e8;--dim:#78a095;--acc:#66cdaa;--acc2:#3fb6c9;--warn:#e8b86a;
+--ch:polygon(9px 0,100% 0,100% calc(100% - 9px),calc(100% - 9px) 100%,0 100%,0 9px);color-scheme:dark;box-sizing:border-box;
+padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit;margin:0}
+body{background:var(--bg);color:var(--text);font:500 17px/1.45 Rajdhani,system-ui,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:26px 16px 70px}
+h1{font:600 clamp(36px,8vw,52px)/1 'Cormorant Garamond',Georgia,serif}
+h2{font:600 26px/1.2 'Cormorant Garamond',Georgia,serif;margin-bottom:10px}
+h3{font-size:15px;font-weight:600;color:var(--dim);margin:14px 0 6px}
+.sub{color:var(--dim);margin:8px 0 20px}
+.card{background:var(--panel);padding:18px;margin-bottom:16px;clip-path:var(--ch)}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85em;color:var(--acc);overflow-wrap:anywhere}
+pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.5;background:var(--code);padding:12px;overflow-x:auto;white-space:pre}
+.map .a{color:var(--acc)}.map .b{color:var(--warn)}
+ol{padding-left:20px;margin:6px 0 12px}li{margin-bottom:4px}
+label.f{display:block;margin-bottom:12px;color:var(--dim);font-size:15px}
+input[type=text]{display:block;width:100%;margin-top:4px;background:var(--code);color:var(--text);border:1px solid var(--line);padding:10px 12px;font:500 16px Rajdhani,system-ui,sans-serif}
+input[type=text]:focus{outline:none;border-color:var(--acc)}
+small{color:var(--dim)}.note{color:var(--warn);font-size:14px;min-height:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:flex;align-items:center;gap:6px;padding:7px 12px;background:var(--code);cursor:pointer;clip-path:var(--ch)}
+.chip.on{background:var(--acc);color:#04120d}.chip.on small{color:#04120d}
+.chip input{accent-color:#04120d}
+.add{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.add input{flex:1 1 140px;margin:0;width:auto}
+.btn{background:var(--acc);color:#04120d;border:0;padding:8px 16px;font:600 16px Rajdhani,system-ui,sans-serif;cursor:pointer;clip-path:var(--ch)}
+.btn.alt{background:var(--code);color:var(--acc)}
+.step{margin-bottom:16px}.step b{font-size:18px}.step p{color:var(--dim);margin:2px 0 8px}
+.warn{color:var(--warn);margin-bottom:10px}.dim{color:var(--dim)}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.lnk{background:none;border:0;color:var(--dim);text-decoration:underline;cursor:pointer;font:inherit;font-size:14px}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--acc);color:#04120d;padding:8px 16px;opacity:0;pointer-events:none;transition:opacity .2s;clip-path:var(--ch)}
+#toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Track code helper</h1>
+  <p class="sub">Add a track to your music player without hand-writing code. Fill in the form, copy the code it makes, and paste it into <code>index.html</code>.</p>
+
+  <section class="card">
+    <h2>Where the code goes</h2>
+    <p class="dim">Open <code>index.html</code> on GitHub (click the file, then the pencil icon). Near the top is the track list. This shows the three spots you’ll paste into:</p>
+<pre class="map">const T = {
+<span class="a">  ← A  your new track line goes here, directly under this line</span>
+  void: { … },
+};
+
+const ALBUMS = [
+<span class="a">  ← C  a brand-new album goes here, directly under this line</span>
+  { name: 'Lux Novus', art: '…', tracks: [T.void, T.ash<span class="b">, T.newtrack</span>] },
+];                          <span class="b">↑ B  add to an existing album or playlist</span>
+
+const PLAYLISTS = [
+<span class="a">  ← C  a brand-new playlist goes here, directly under this line</span>
+  { name: 'Motifs', tracks: [T.void, T.ash<span class="b">, T.newtrack</span>] },
+];</pre>
+    <ol>
+      <li>Use the form below. The code it makes is labelled A, B or C to match the map above.</li>
+      <li>Copy each block and paste it where it says. Tip: use Ctrl or Cmd+F in the editor to find <code>const T = {</code>.</li>
+      <li>Click Commit changes. The site updates in about a minute, so refresh it to see the track.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>1. The track</h2>
+    <label class="f">Dropbox link (set to “Anyone with the link”)<input type="text" id="link" inputmode="url" autocomplete="off" placeholder="https://www.dropbox.com/scl/fi/…"></label>
+    <label class="f">Title<input type="text" id="title" autocomplete="off"></label>
+    <label class="f">Key <small>(a short unique name used in the code, filled in for you)</small><input type="text" id="key" autocomplete="off" autocapitalize="off"></label>
+    <div class="note" id="keyNote"></div>
+    <label class="f">Artist <small>(optional, otherwise the site default is used)</small><input type="text" id="artist" autocomplete="off"></label>
+  </section>
+
+  <section class="card">
+    <h2>2. Where it belongs</h2>
+    <h3>Albums</h3><div class="chips" id="albums"></div>
+    <div class="add"><input type="text" id="nal" placeholder="New album name"><input type="text" id="nar" placeholder="Cover file, e.g. cover.png"><button class="btn alt" id="aal">Add album</button></div>
+    <h3>Playlists</h3><div class="chips" id="playlists"></div>
+    <div class="add"><input type="text" id="npl" placeholder="New playlist name"><button class="btn alt" id="apl">Add playlist</button></div>
+  </section>
+
+  <section class="card">
+    <h2>3. Paste it in</h2>
+    <div id="steps"></div>
+    <div class="foot"><button class="btn" id="done">Done, next track</button><button class="lnk" id="reset">Reset saved lists</button></div>
+  </section>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+const DEF = {
+  albums: [{ name: 'Lux Novus', art: 'LN ost cover.png', inFile: true }],
+  playlists: ['Fight tracks', 'Motifs', 'Ambient'].map(n => ({ name: n, inFile: true })),
+  used: ['void', 'spider', 'ash', 'kothari']
+};
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const q = s => "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
+let S = null;
+try { S = JSON.parse(localStorage.getItem('ri.helper')); } catch {}
+if (!S || !S.albums || !S.playlists || !S.used) S = JSON.parse(JSON.stringify(DEF));
+const save = () => { try { localStorage.setItem('ri.helper', JSON.stringify(S)); } catch {} };
+const sel = { albums: new Set(), playlists: new Set() };
+let titleTouched = false, keyTouched = false, copies = [], toastT;
+const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200); };
+
+function titleFrom(u) {
+  try {
+    return decodeURIComponent(new URL(u).pathname.split('/').pop()).replace(/\.(mp3|wav|flac|m4a|ogg|aac)$/i, '')
+      .replace(/[-_]+/g, ' ').replace(/(\w) s\b/g, '$1’s').trim();
+  } catch { return ''; }
+}
+function keyOf(t) {
+  const w = t.replace(/[’']/g, '').split(/[^A-Za-z0-9]+/).filter(Boolean);
+  let k = w.map((x, i) => i ? x[0].toUpperCase() + x.slice(1).toLowerCase() : x.toLowerCase()).join('');
+  if (!k || /^\d/.test(k)) k = 't' + k;
+  return k.slice(0, 24);
+}
+function autoKey() {
+  const t = $('#title').value.trim(); let k = t ? keyOf(t) : '', base = k, n = 2;
+  while (k && S.used.includes(k)) k = base + n++;
+  $('#key').value = k;
+}
+
+function chips() {
+  for (const k of ['albums', 'playlists']) {
+    $('#' + k).innerHTML = S[k].map(g => `<label class="chip${sel[k].has(g.name) ? ' on' : ''}"><input type="checkbox" data-k="${k}" data-n="${esc(g.name)}"${sel[k].has(g.name) ? ' checked' : ''}>${esc(g.name)}${g.inFile ? '' : ' <small>new</small>'}</label>`).join('') || '<span class="dim">None yet</span>';
+  }
+}
+function steps() {
+  const link = $('#link').value.trim(), title = $('#title').value.trim(), key = $('#key').value.trim(), artist = $('#artist').value.trim();
+  $('#keyNote').textContent = key && S.used.includes(key) ? 'That key is already used by another track. Pick a different one.' : '';
+  const out = $('#steps');
+  if (!link || !title || !key) { out.innerHTML = '<p class="dim">Fill in the link, title and key above and your code appears here.</p>'; return; }
+  copies = [];
+  const step = (t, d, code) => { copies.push(code); return `<div class="step"><b>${t}</b><p>${d}</p><pre>${esc(code)}</pre><button class="btn" data-c="${copies.length - 1}">Copy</button></div>`; };
+  const groups = [...S.albums.filter(g => sel.albums.has(g.name)).map(g => [g, 'album']), ...S.playlists.filter(g => sel.playlists.has(g.name)).map(g => [g, 'playlist'])];
+  let h = '';
+  if (!/dropbox\.com/i.test(link)) h += '<p class="warn">That doesn’t look like a Dropbox link.</p>';
+  if (!groups.length) h += '<p class="warn">Pick at least one album or playlist above. A track that isn’t in one won’t show up on the site.</p>';
+  h += step('A. Add the track', 'Paste this on a new line directly under <code>const T = {</code>', `  ${key}: { title: ${q(title)}, url: ${q(link)}${artist ? ', artist: ' + q(artist) : ''} },`);
+  for (const [g, kind] of groups) {
+    const arr = kind === 'album' ? 'ALBUMS' : 'PLAYLISTS';
+    if (g.inFile) h += step(`B. Add to the ${kind} “${esc(g.name)}”`, `Find the line starting <code>{ name: ${esc(q(g.name))}</code> and add this just before its closing <code>]</code>`, `, T.${key}`);
+    else h += step(`C. New ${kind} “${esc(g.name)}”`, `Paste this on a new line directly under <code>const ${arr} = [</code>`, `  { name: ${q(g.name)}, ${kind === 'album' && g.art ? 'art: ' + q(g.art) + ', ' : ''}tracks: [T.${key}] },`);
+  }
+  out.innerHTML = h;
+}
+
+function copy(t, b) {
+  const ok = () => { b.textContent = 'Copied'; setTimeout(() => { b.textContent = 'Copy'; }, 1500); };
+  const fb = () => {
+    const x = document.createElement('textarea'); x.value = t; x.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(x); x.select();
+    try { document.execCommand('copy'); ok(); } catch { b.textContent = 'Select the code and copy it by hand'; }
+    x.remove();
+  };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok, fb); else fb();
+}
+
+$('#link').oninput = () => { if (!titleTouched) $('#title').value = titleFrom($('#link').value); if (!keyTouched) autoKey(); steps(); };
+$('#title').oninput = () => { titleTouched = true; if (!keyTouched) autoKey(); steps(); };
+$('#key').oninput = () => { keyTouched = true; steps(); };
+$('#artist').oninput = steps;
+document.addEventListener('change', e => {
+  const c = e.target.closest('input[data-k]'); if (!c) return;
+  const s = sel[c.dataset.k]; c.checked ? s.add(c.dataset.n) : s.delete(c.dataset.n); chips(); steps();
+});
+$('#aal').onclick = () => {
+  const n = $('#nal').value.trim(); if (!n || S.albums.some(g => g.name === n)) return;
+  S.albums.push({ name: n, art: $('#nar').value.trim(), inFile: false }); sel.albums.add(n); $('#nal').value = $('#nar').value = ''; save(); chips(); steps();
+};
+$('#apl').onclick = () => {
+  const n = $('#npl').value.trim(); if (!n || S.playlists.some(g => g.name === n)) return;
+  S.playlists.push({ name: n, inFile: false }); sel.playlists.add(n); $('#npl').value = ''; save(); chips(); steps();
+};
+$('#steps').onclick = e => { const b = e.target.closest('[data-c]'); if (b) copy(copies[+b.dataset.c], b); };
+$('#done').onclick = () => {
+  const key = $('#key').value.trim(); if (key && !S.used.includes(key)) S.used.push(key);
+  S.albums.forEach(g => { if (sel.albums.has(g.name)) g.inFile = true; });
+  S.playlists.forEach(g => { if (sel.playlists.has(g.name)) g.inFile = true; });
+  ['#link', '#title', '#key', '#artist'].forEach(i => { $(i).value = ''; });
+  sel.albums.clear(); sel.playlists.clear(); titleTouched = keyTouched = false;
+  save(); chips(); steps(); scrollTo({ top: 0, behavior: 'smooth' }); toast('Saved. Ready for the next track.');
+};
+$('#reset').onclick = () => { S = JSON.parse(JSON.stringify(DEF)); sel.albums.clear(); sel.playlists.clear(); save(); chips(); steps(); toast('Lists reset'); };
+
+chips(); steps();
+</script>
+</body>
+</html>
