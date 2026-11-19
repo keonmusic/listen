@@ -48,29 +48,29 @@ small{color:var(--dim)}.note{color:var(--warn);font-size:14px;min-height:0}
 <body>
 <div class="wrap">
   <h1>Track code helper</h1>
-  <p class="sub">Add a track to your music player without hand-writing code. Fill in the form, copy the code it makes, and paste it into <code>index.html</code>.</p>
+  <p class="sub">Add a track to your music player without hand-writing code. Fill in the form, copy the code it makes, and paste it into <code>library.json</code>.</p>
 
   <section class="card">
     <h2>Where the code goes</h2>
-    <p class="dim">Open <code>index.html</code> on GitHub (click the file, then the pencil icon). Near the top is the track list. This shows the three spots you’ll paste into:</p>
-<pre class="map">const T = {
-<span class="a">  ← A  your new track line goes here, directly under this line</span>
-  void: { … },
-};
-
-const ALBUMS = [
-<span class="a">  ← C  a brand-new album goes here, directly under this line</span>
-  { name: 'Lux Novus', art: '…', tracks: [T.void, T.ash<span class="b">, T.newtrack</span>] },
-];                          <span class="b">↑ B  add to an existing album or playlist</span>
-
-const PLAYLISTS = [
-<span class="a">  ← C  a brand-new playlist goes here, directly under this line</span>
-  { name: 'Motifs', tracks: [T.void, T.ash<span class="b">, T.newtrack</span>] },
-];</pre>
+    <p class="dim">Open <code>library.json</code> on GitHub (click the file, then the pencil icon). This shows the spots you’ll paste into:</p>
+<pre class="map">{
+  "tracks": {
+<span class="a">    ← A  your new track line goes here, directly under this line</span>
+    "void": { … },
+  },
+  "albums": [
+<span class="a">    ← C  a brand-new album goes here, directly under this line</span>
+    { "name": "Lux Novus", "art": "…", "tracks": ["void", "ash"<span class="b">, "newtrack"</span>] },
+  ],                         <span class="b">↑ B  add to an existing album or playlist</span>
+  "playlists": [
+<span class="a">    ← C  a brand-new playlist goes here, directly under this line</span>
+    { "name": "Motifs", "tracks": ["void", "ash"<span class="b">, "newtrack"</span>] }
+  ]
+}</pre>
     <ol>
       <li>Use the form below. The code it makes is labelled A, B or C to match the map above.</li>
-      <li>Copy each block and paste it where it says. Tip: use Ctrl or Cmd+F in the editor to find <code>const T = {</code>.</li>
-      <li>Click Commit changes. The site updates in about a minute, so refresh it to see the track.</li>
+      <li>Copy each block and paste it where it says. Tip: use Ctrl or Cmd+F in the editor to find the line.</li>
+      <li>Click Commit changes, wait about a minute, then refresh the player. If it says it couldn’t load <code>library.json</code>, a comma or quote is out of place.</li>
     </ol>
   </section>
 
@@ -85,6 +85,7 @@ const PLAYLISTS = [
 
   <section class="card">
     <h2>2. Where it belongs</h2>
+    <p class="dim">Tick where this track goes. To make a new album or playlist, add it here and it’s ticked for you. You can add one without a track too.</p>
     <h3>Albums</h3><div class="chips" id="albums"></div>
     <div class="add"><input type="text" id="nal" placeholder="New album name"><input type="text" id="nar" placeholder="Cover file, e.g. cover.png"><button class="btn alt" id="aal">Add album</button></div>
     <h3>Playlists</h3><div class="chips" id="playlists"></div>
@@ -107,7 +108,7 @@ const DEF = {
 };
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const q = s => "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
+const j = s => JSON.stringify(String(s));
 let S = null;
 try { S = JSON.parse(localStorage.getItem('ri.helper')); } catch {}
 if (!S || !S.albums || !S.playlists || !S.used) S = JSON.parse(JSON.stringify(DEF));
@@ -142,21 +143,29 @@ function chips() {
 function steps() {
   const link = $('#link').value.trim(), title = $('#title').value.trim(), key = $('#key').value.trim(), artist = $('#artist').value.trim();
   $('#keyNote').textContent = key && S.used.includes(key) ? 'That key is already used by another track. Pick a different one.' : '';
-  const out = $('#steps');
-  if (!link || !title || !key) { out.innerHTML = '<p class="dim">Fill in the link, title and key above and your code appears here.</p>'; return; }
-  copies = [];
+  const out = $('#steps'); copies = [];
   const step = (t, d, code) => { copies.push(code); return `<div class="step"><b>${t}</b><p>${d}</p><pre>${esc(code)}</pre><button class="btn" data-c="${copies.length - 1}">Copy</button></div>`; };
-  const groups = [...S.albums.filter(g => sel.albums.has(g.name)).map(g => [g, 'album']), ...S.playlists.filter(g => sel.playlists.has(g.name)).map(g => [g, 'playlist'])];
+  const ng = (g, kind, k) => {
+    const where = kind === 'album' ? 'albums' : 'playlists', art = kind === 'album' && g.art ? `"art": ${j(g.art)}, ` : '';
+    return step(`C. New ${kind} “${esc(g.name)}”`, `Paste this on a new line directly under <code>"${where}": [</code>.` + (art ? ` Also upload the cover image <code>${esc(g.art)}</code> to your repo, next to <code>index.html</code>.` : ''), `    { "name": ${j(g.name)}, ${art}"tracks": [${k ? j(k) : ''}] },`);
+  };
+  const fresh = [...S.albums.filter(g => !g.inFile).map(g => [g, 'album']), ...S.playlists.filter(g => !g.inFile).map(g => [g, 'playlist'])];
+  const note = '<p class="dim">If a list you paste under is empty, delete the comma at the end of what you pasted.</p>';
+  if (!link || !title || !key) {
+    out.innerHTML = fresh.length ? '<p class="dim">No track filled in, so these new lists start empty.</p>' + fresh.map(([g, kind]) => ng(g, kind, '')).join('') + note
+      : '<p class="dim">Fill in the link, title and key above and your code appears here. To make a new album or playlist, add it in step 2.</p>';
+    return;
+  }
+  const chosen = [...S.albums.filter(g => sel.albums.has(g.name)).map(g => [g, 'album']), ...S.playlists.filter(g => sel.playlists.has(g.name)).map(g => [g, 'playlist'])];
   let h = '';
   if (!/dropbox\.com/i.test(link)) h += '<p class="warn">That doesn’t look like a Dropbox link.</p>';
-  if (!groups.length) h += '<p class="warn">Pick at least one album or playlist above. A track that isn’t in one won’t show up on the site.</p>';
-  h += step('A. Add the track', 'Paste this on a new line directly under <code>const T = {</code>', `  ${key}: { title: ${q(title)}, url: ${q(link)}${artist ? ', artist: ' + q(artist) : ''} },`);
-  for (const [g, kind] of groups) {
-    const arr = kind === 'album' ? 'ALBUMS' : 'PLAYLISTS';
-    if (g.inFile) h += step(`B. Add to the ${kind} “${esc(g.name)}”`, `Find the line starting <code>{ name: ${esc(q(g.name))}</code> and add this just before its closing <code>]</code>`, `, T.${key}`);
-    else h += step(`C. New ${kind} “${esc(g.name)}”`, `Paste this on a new line directly under <code>const ${arr} = [</code>`, `  { name: ${q(g.name)}, ${kind === 'album' && g.art ? 'art: ' + q(g.art) + ', ' : ''}tracks: [T.${key}] },`);
+  if (!chosen.length) h += '<p class="dim">Not in an album or playlist yet, so it will only show under “All tracks”.</p>';
+  h += step('A. Add the track', 'Paste this on a new line directly under <code>"tracks": {</code>', `    ${j(key)}: { "title": ${j(title)}, "url": ${j(link)}${artist ? ', "artist": ' + j(artist) : ''} },`);
+  for (const [g, kind] of chosen) {
+    if (g.inFile) h += step(`B. Add to the ${kind} “${esc(g.name)}”`, `Find the line starting <code>{ "name": ${esc(j(g.name))}</code> and add this just before its closing <code>]</code>. If its list is empty, leave out the comma.`, `, ${j(key)}`);
+    else h += ng(g, kind, key);
   }
-  out.innerHTML = h;
+  out.innerHTML = h + note;
 }
 
 function copy(t, b) {
@@ -188,8 +197,9 @@ $('#apl').onclick = () => {
 $('#steps').onclick = e => { const b = e.target.closest('[data-c]'); if (b) copy(copies[+b.dataset.c], b); };
 $('#done').onclick = () => {
   const key = $('#key').value.trim(); if (key && !S.used.includes(key)) S.used.push(key);
-  S.albums.forEach(g => { if (sel.albums.has(g.name)) g.inFile = true; });
-  S.playlists.forEach(g => { if (sel.playlists.has(g.name)) g.inFile = true; });
+  const had = $('#link').value.trim() && $('#title').value.trim() && key;
+  S.albums.forEach(g => { if (!had || sel.albums.has(g.name)) g.inFile = true; });
+  S.playlists.forEach(g => { if (!had || sel.playlists.has(g.name)) g.inFile = true; });
   ['#link', '#title', '#key', '#artist'].forEach(i => { $(i).value = ''; });
   sel.albums.clear(); sel.playlists.clear(); titleTouched = keyTouched = false;
   save(); chips(); steps(); scrollTo({ top: 0, behavior: 'smooth' }); toast('Saved. Ready for the next track.');
