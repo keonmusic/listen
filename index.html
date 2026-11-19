@@ -164,7 +164,7 @@ function setLibrary(lib) {
   const mk = g => ({ name: g.name, art: g.art, tracks: (g.tracks || []).map(k => { if (!T[k]) bad.push('“' + k + '” (in ' + g.name + ')'); return T[k]; }).filter(Boolean) });
   if (lib.artist) SITE.artist = lib.artist;
   ALBUMS = (lib.albums || []).map(mk); PLAYLISTS = (lib.playlists || []).map(mk);
-  ALBUMS.forEach(al => al.tracks.forEach(t => { t.art = t.art || al.art; }));
+  ALBUMS.forEach(al => al.tracks.forEach(t => { t.art = t.art || al.art; t.album = t.album || al.name; }));
   all = Object.values(T);
   lists = [{ name: 'All tracks', tracks: all }, ...ALBUMS, ...PLAYLISTS];
   return bad;
@@ -180,6 +180,7 @@ async function load() {
   }
   renderSide(); ui(); renderQ();
 }
+const sub = t => [t.artist || SITE.artist, t.album].filter(Boolean).join(' – ');
 const artUrl = t => t && t.art ? new URL(encodeURI(t.art), location.href).href : '';
 let view = 0, src = [], ctx = [], ci = -1, ctxName = '', queue = [], hist = [], cur = null, scrubbing = false;
 let shuffle = store.get('shuffle', false), loop = store.get('loop', 'off');
@@ -200,7 +201,7 @@ function start(t, push) {
   if (push && cur) hist.push(cur);
   cur = t; a.src = direct(t.url); a.play().catch(() => {});
   document.title = t.title + ' – Rogue Industries Music';
-  if ('mediaSession' in navigator) navigator.mediaSession.metadata = new MediaMetadata({ title: t.title, artist: t.artist || SITE.artist, album: ctxName, artwork: t.art ? [{ src: artUrl(t) }] : [] });
+  if ('mediaSession' in navigator) navigator.mediaSession.metadata = new MediaMetadata({ title: t.title, artist: t.artist || SITE.artist, album: t.album || ctxName, artwork: t.art ? [{ src: artUrl(t) }] : [] });
   ui(); renderQ();
 }
 function next(auto) {
@@ -239,7 +240,7 @@ function renderList() {
   $('#rows').innerHTML = L.length ? L.map((t, i) => {
     const on = cur && cur.url === t.url;
     return `<li class="row${on ? ' on' : ''}" data-i="${i}"><button class="play" data-a="play"><span class="n">${on ? ic(a.paused ? 'play' : 'pause') : i + 1}</span>` +
-      `<span><span class="tt">${esc(t.title)}</span><small class="tt">${esc(t.artist || SITE.artist)}</small></span></button>` +
+      `<span><span class="tt">${esc(t.title)}</span><small class="tt">${esc(sub(t))}</small></span></button>` +
       `<span class="d">${esc(t.dur || '')}</span>` +
       `<button class="mini" data-a="top" aria-label="Play next" title="Play next">${ic('top')}</button>` +
       `<button class="mini" data-a="add" aria-label="Add to queue" title="Add to queue">${ic('plus')}</button></li>`;
@@ -247,7 +248,7 @@ function renderList() {
 }
 function renderQ() {
   const up = ctx.slice(ci + 1, ci + 9), item = (t, attr, rm) =>
-    `<div class="qi"><button class="qt" ${attr}><span class="tt">${esc(t.title)}</span><small class="tt">${esc(t.artist || SITE.artist)}</small></button>` +
+    `<div class="qi"><button class="qt" ${attr}><span class="tt">${esc(t.title)}</span><small class="tt">${esc(sub(t))}</small></button>` +
     (rm ? `<button class="mini" data-r="${rm}" aria-label="Remove from queue">${ic('x')}</button>` : '') + '</div>';
   $('#qbody').innerHTML =
     (cur ? `<h3>Now playing</h3><div class="qi"><span class="qt"><span class="tt">${esc(cur.title)}</span></span></div>` : '') +
@@ -261,7 +262,7 @@ function ui() {
   $('#sh').classList.toggle('on', shuffle); $('#sh').setAttribute('aria-label', shuffle ? 'Shuffle: on' : 'Shuffle: off');
   $('#lp').classList.toggle('on', loop !== 'off'); $('#lp').dataset.m = loop; $('#lp').setAttribute('aria-label', lm); $('#lp').title = lm;
   $('#nt').textContent = cur ? cur.title : 'Nothing playing';
-  $('#na').textContent = cur ? (cur.artist || SITE.artist) : 'Pick a track to start';
+  $('#na').textContent = cur ? sub(cur) : 'Pick a track to start';
   $('#art').style.backgroundImage = artUrl(cur) ? `url("${artUrl(cur)}")` : '';
   renderList();
 }
