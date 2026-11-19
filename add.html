@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Track code helper</title>
+<title>Library helper</title>
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/png" href="/RI%20logo%20nobackground.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +15,7 @@
 padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:inherit;margin:0}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--text);font:500 17px/1.45 Rajdhani,system-ui,sans-serif}
 .wrap{max-width:720px;margin:0 auto;padding:26px 16px 70px}
 h1{font:600 clamp(36px,8vw,52px)/1 'Cormorant Garamond',Georgia,serif}
@@ -23,100 +24,118 @@ h3{font-size:15px;font-weight:600;color:var(--dim);margin:14px 0 6px}
 .sub{color:var(--dim);margin:8px 0 20px}
 .card{background:var(--panel);padding:18px;margin-bottom:16px;clip-path:var(--ch)}
 code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85em;color:var(--acc);overflow-wrap:anywhere}
-pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.5;background:var(--code);padding:12px;overflow-x:auto;white-space:pre}
-.map .a{color:var(--acc)}.map .b{color:var(--warn)}
+pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.5;background:var(--code);padding:12px;overflow:auto;white-space:pre;max-height:340px}
 ol{padding-left:20px;margin:6px 0 12px}li{margin-bottom:4px}
 label.f{display:block;margin-bottom:12px;color:var(--dim);font-size:15px}
-input[type=text]{display:block;width:100%;margin-top:4px;background:var(--code);color:var(--text);border:1px solid var(--line);padding:10px 12px;font:500 16px Rajdhani,system-ui,sans-serif}
-input[type=text]:focus{outline:none;border-color:var(--acc)}
-small{color:var(--dim)}.note{color:var(--warn);font-size:14px;min-height:0}
+input[type=text],textarea{display:block;width:100%;margin-top:4px;background:var(--code);color:var(--text);border:1px solid var(--line);padding:10px 12px;font:500 16px Rajdhani,system-ui,sans-serif}
+textarea{font:13px ui-monospace,Menlo,Consolas,monospace;margin:8px 0}
+input:focus,textarea:focus{outline:none;border-color:var(--acc)}
+small{color:var(--dim)}.note{color:var(--warn);font-size:14px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{display:flex;align-items:center;gap:6px;padding:7px 12px;background:var(--code);cursor:pointer;clip-path:var(--ch)}
-.chip.on{background:var(--acc);color:#04120d}.chip.on small{color:#04120d}
-.chip input{accent-color:#04120d}
-.add{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.add input{flex:1 1 140px;margin:0;width:auto}
+.chip.on{background:var(--acc);color:#04120d}.chip.on small{color:#04120d}.chip input{accent-color:#04120d}
+.add{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}.add input[type=text]{flex:1 1 140px;margin:0;width:auto}
 .btn{background:var(--acc);color:#04120d;border:0;padding:8px 16px;font:600 16px Rajdhani,system-ui,sans-serif;cursor:pointer;clip-path:var(--ch)}
 .btn.alt{background:var(--code);color:var(--acc)}
-.step{margin-bottom:16px}.step b{font-size:18px}.step p{color:var(--dim);margin:2px 0 8px}
-.warn{color:var(--warn);margin-bottom:10px}.dim{color:var(--dim)}
-.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.lnk{background:none;border:0;color:var(--dim);text-decoration:underline;cursor:pointer;font:inherit;font-size:14px}
+.list{max-height:320px;overflow:auto;margin-top:12px}
+.row{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding:6px 0}
+.row .w{flex:1;min-width:0}.row b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.x{width:34px;height:34px;background:none;border:0;color:var(--dim);font-size:22px;cursor:pointer}.x:hover{color:var(--warn)}
+.tag{color:var(--acc);font-size:13px}
+.warn{color:var(--warn)}.dim{color:var(--dim)}
+details{margin-top:10px;color:var(--dim)}summary{cursor:pointer;color:var(--acc)}
 #toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--acc);color:#04120d;padding:8px 16px;opacity:0;pointer-events:none;transition:opacity .2s;clip-path:var(--ch)}
 #toast.show{opacity:1}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Track code helper</h1>
-  <p class="sub">Add a track to your music player without hand-writing code. Fill in the form, copy the code it makes, and paste it into <code>library.json</code>.</p>
+  <h1>Library helper</h1>
+  <p class="sub">It reads your current <code>library.json</code>. Add tracks, albums and playlists, then copy the new file and upload it to replace the old one.</p>
 
   <section class="card">
-    <h2>Where the code goes</h2>
-    <p class="dim">Open <code>library.json</code> on GitHub (click the file, then the pencil icon). This shows the spots you’ll paste into:</p>
-<pre class="map">{
-  "tracks": {
-<span class="a">    ← A  your new track line goes here, directly under this line</span>
-    "void": { … },
-  },
-  "albums": [
-<span class="a">    ← C  a brand-new album goes here, directly under this line</span>
-    { "name": "Lux Novus", "art": "…", "tracks": ["void", "ash"<span class="b">, "newtrack"</span>] },
-  ],                         <span class="b">↑ B  add to an existing album or playlist</span>
-  "playlists": [
-<span class="a">    ← C  a brand-new playlist goes here, directly under this line</span>
-    { "name": "Motifs", "tracks": ["void", "ash"<span class="b">, "newtrack"</span>] }
-  ]
-}</pre>
-    <ol>
-      <li>Use the form below. The code it makes is labelled A, B or C to match the map above.</li>
-      <li>Copy each block and paste it where it says. Tip: use Ctrl or Cmd+F in the editor to find the line.</li>
-      <li>Click Commit changes, wait about a minute, then refresh the player. If it says it couldn’t load <code>library.json</code>, a comma or quote is out of place.</li>
-    </ol>
+    <h2>1. Your current library</h2>
+    <p id="status" class="dim">Loading library.json from the site…</p>
+    <details id="manual"><summary>Load a copy by hand instead</summary>
+      <p>Paste the contents of your <code>library.json</code>, or choose the file.</p>
+      <textarea id="paste" rows="5" spellcheck="false" aria-label="library.json contents"></textarea>
+      <div class="add"><input type="file" id="file" accept=".json,application/json"><button class="btn alt" id="lm">Load pasted text</button></div>
+    </details>
+    <div class="list" id="tracks"></div>
   </section>
 
-  <section class="card">
-    <h2>1. The track</h2>
-    <label class="f">Dropbox link (set to “Anyone with the link”)<input type="text" id="link" inputmode="url" autocomplete="off" placeholder="https://www.dropbox.com/scl/fi/…"></label>
-    <label class="f">Title<input type="text" id="title" autocomplete="off"></label>
-    <label class="f">Key <small>(a short unique name used in the code, filled in for you)</small><input type="text" id="key" autocomplete="off" autocapitalize="off"></label>
-    <div class="note" id="keyNote"></div>
-    <label class="f">Artist <small>(optional, otherwise the site default is used)</small><input type="text" id="artist" autocomplete="off"></label>
-  </section>
+  <div id="work" hidden>
+    <section class="card">
+      <h2>2. Add a track</h2>
+      <label class="f">Dropbox link (set to “Anyone with the link”)<input type="text" id="link" inputmode="url" autocomplete="off" placeholder="https://www.dropbox.com/scl/fi/…"></label>
+      <div class="note" id="linkNote"></div>
+      <label class="f">Title<input type="text" id="title" autocomplete="off"></label>
+      <label class="f">Key <small>(a short unique name used in the file, filled in for you)</small><input type="text" id="key" autocomplete="off" autocapitalize="off"></label>
+      <div class="note" id="keyNote"></div>
+      <label class="f">Artist <small>(optional, otherwise the site default is used)</small><input type="text" id="artist" autocomplete="off"></label>
+      <h3>Put it in these albums</h3><div class="chips" id="albums"></div>
+      <div class="add"><input type="text" id="nal" placeholder="New album name"><input type="text" id="nar" placeholder="Cover file, e.g. cover.png"><button class="btn alt" id="aal">Add album</button></div>
+      <h3>Put it in these playlists</h3><div class="chips" id="playlists"></div>
+      <div class="add"><input type="text" id="npl" placeholder="New playlist name"><button class="btn alt" id="apl">Add playlist</button></div>
+      <p class="dim" style="margin:12px 0">A new album or playlist can be made without a track. A track in no album or playlist only shows under “All tracks”.</p>
+      <button class="btn" id="addt">Add track to the list</button>
+    </section>
 
-  <section class="card">
-    <h2>2. Where it belongs</h2>
-    <p class="dim">Tick where this track goes. To make a new album or playlist, add it here and it’s ticked for you. You can add one without a track too.</p>
-    <h3>Albums</h3><div class="chips" id="albums"></div>
-    <div class="add"><input type="text" id="nal" placeholder="New album name"><input type="text" id="nar" placeholder="Cover file, e.g. cover.png"><button class="btn alt" id="aal">Add album</button></div>
-    <h3>Playlists</h3><div class="chips" id="playlists"></div>
-    <div class="add"><input type="text" id="npl" placeholder="New playlist name"><button class="btn alt" id="apl">Add playlist</button></div>
-  </section>
-
-  <section class="card">
-    <h2>3. Paste it in</h2>
-    <div id="steps"></div>
-    <div class="foot"><button class="btn" id="done">Done, next track</button><button class="lnk" id="reset">Reset saved lists</button></div>
-  </section>
+    <section class="card">
+      <h2>3. Your new library.json</h2>
+      <p id="dirty" class="dim"></p>
+      <ol>
+        <li>Click Copy (or Download) below.</li>
+        <li>On GitHub, open <code>library.json</code>, click the pencil icon, select everything (Ctrl or Cmd+A), paste, and click Commit changes. If you used Download, you can instead choose Add file, then Upload files, and drop the downloaded file in to replace the old one.</li>
+        <li>Wait about a minute and refresh the player. If you added an album, upload its cover image to your repo next to <code>index.html</code> too.</li>
+      </ol>
+      <div class="add" style="margin:0 0 10px"><button class="btn" id="copy">Copy</button><button class="btn alt" id="dl">Download</button></div>
+      <pre id="out"></pre>
+    </section>
+  </div>
 </div>
 <div id="toast" role="status"></div>
 
 <script>
-const DEF = {
-  albums: [{ name: 'Lux Novus', art: 'LN ost cover.png', inFile: true }],
-  playlists: ['Fight tracks', 'Motifs', 'Ambient'].map(n => ({ name: n, inFile: true })),
-  used: ['void', 'spider', 'ash', 'kothari']
-};
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const j = s => JSON.stringify(String(s));
-let S = null;
-try { S = JSON.parse(localStorage.getItem('ri.helper')); } catch {}
-if (!S || !S.albums || !S.playlists || !S.used) S = JSON.parse(JSON.stringify(DEF));
-const save = () => { try { localStorage.setItem('ri.helper', JSON.stringify(S)); } catch {} };
-const sel = { albums: new Set(), playlists: new Set() };
-let titleTouched = false, keyTouched = false, copies = [], toastT;
+const j = JSON.stringify;
+let lib = null, snap = '', from = '', toastT, titleTouched = false, keyTouched = false;
+const sel = { albums: new Set(), playlists: new Set() }, newT = new Set(), newG = new Set();
 const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200); };
 
+/* ---------- reading and writing the file ---------- */
+const flat = o => '{ ' + Object.entries(o).map(([k, v]) => j(k) + ': ' + (Array.isArray(v) ? '[' + v.map(j).join(', ') + ']' : j(v))).join(', ') + ' }';
+function fmtLib(L) {
+  const parts = [];
+  if ('artist' in L) parts.push('  "artist": ' + j(L.artist));
+  parts.push('  "tracks": {\n' + Object.entries(L.tracks).map(([k, t]) => '    ' + j(k) + ': ' + flat(t)).join(',\n') + '\n  }');
+  for (const n of ['albums', 'playlists']) parts.push('  ' + j(n) + ': [\n' + L[n].map(g => '    ' + flat(g)).join(',\n') + '\n  ]');
+  for (const k of Object.keys(L)) if (!['artist', 'tracks', 'albums', 'playlists'].includes(k)) parts.push('  ' + j(k) + ': ' + j(L[k]));
+  return '{\n' + parts.join(',\n') + '\n}\n';
+}
+function fail(m) { $('#status').innerHTML = '<span class="warn">' + esc(m) + '</span>'; $('#manual').open = true; }
+function setLib(text, where) {
+  let L;
+  try { L = JSON.parse(text); } catch (e) { return fail('That isn’t valid JSON: ' + e.message); }
+  if (!L || typeof L !== 'object' || !L.tracks || typeof L.tracks !== 'object' || Array.isArray(L.tracks)) return fail('That doesn’t look like your library.json (it has no “tracks” list).');
+  L.albums = Array.isArray(L.albums) ? L.albums : []; L.playlists = Array.isArray(L.playlists) ? L.playlists : [];
+  [...L.albums, ...L.playlists].forEach(g => { g.tracks = Array.isArray(g.tracks) ? g.tracks : []; });
+  lib = L; snap = j(L); from = where; sel.albums.clear(); sel.playlists.clear(); newT.clear(); newG.clear();
+  $('#work').hidden = false; $('#manual').open = false; render();
+}
+async function loadSite() {
+  try {
+    const r = await fetch('/library.json', { cache: 'no-cache' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    setLib(await r.text(), 'the site');
+  } catch (e) {
+    $('#status').textContent = 'Couldn’t read library.json from the site automatically, so load a copy by hand below.';
+    $('#manual').open = true;
+  }
+}
+
+/* ---------- helpers for the form ---------- */
 function titleFrom(u) {
   try {
     return decodeURIComponent(new URL(u).pathname.split('/').pop()).replace(/\.(mp3|wav|flac|m4a|ogg|aac)$/i, '')
@@ -131,82 +150,81 @@ function keyOf(t) {
 }
 function autoKey() {
   const t = $('#title').value.trim(); let k = t ? keyOf(t) : '', base = k, n = 2;
-  while (k && S.used.includes(k)) k = base + n++;
-  $('#key').value = k;
+  while (k && lib && lib.tracks[k]) k = base + n++;
+  $('#key').value = k; notes();
+}
+function notes() {
+  const key = $('#key').value.trim(), link = $('#link').value.trim();
+  $('#keyNote').textContent = key && lib && lib.tracks[key] ? 'That key is already used by another track. Pick a different one.' : '';
+  $('#linkNote').textContent = link && !/dropbox\.com/i.test(link) ? 'That doesn’t look like a Dropbox link.' : '';
 }
 
-function chips() {
+/* ---------- drawing the page ---------- */
+const groupsOf = k => [...lib.albums, ...lib.playlists].filter(g => g.tracks.includes(k)).map(g => g.name);
+function render() {
+  const n = Object.keys(lib.tracks).length, dirty = j(lib) !== snap;
+  $('#status').textContent = `Loaded from ${from}: ${n} track${n === 1 ? '' : 's'}, ${lib.albums.length} album${lib.albums.length === 1 ? '' : 's'}, ${lib.playlists.length} playlist${lib.playlists.length === 1 ? '' : 's'}.`;
+  $('#tracks').innerHTML = Object.entries(lib.tracks).map(([k, t]) => {
+    const g = groupsOf(k);
+    return `<div class="row"><div class="w"><b>${esc(t.title || k)} ${newT.has(k) ? '<span class="tag">new</span>' : ''}</b><small>${esc(k)} – ${esc(g.length ? g.join(', ') : 'not in an album or playlist')}</small></div><button class="x" data-rm="${esc(k)}" aria-label="Remove ${esc(t.title || k)}">×</button></div>`;
+  }).join('') || '<p class="dim">No tracks yet.</p>';
   for (const k of ['albums', 'playlists']) {
-    $('#' + k).innerHTML = S[k].map(g => `<label class="chip${sel[k].has(g.name) ? ' on' : ''}"><input type="checkbox" data-k="${k}" data-n="${esc(g.name)}"${sel[k].has(g.name) ? ' checked' : ''}>${esc(g.name)}${g.inFile ? '' : ' <small>new</small>'}</label>`).join('') || '<span class="dim">None yet</span>';
+    $('#' + k).innerHTML = lib[k].map(g => `<label class="chip${sel[k].has(g.name) ? ' on' : ''}"><input type="checkbox" data-k="${k}" data-n="${esc(g.name)}"${sel[k].has(g.name) ? ' checked' : ''}>${esc(g.name)} <small>${g.tracks.length}</small>${newG.has(k + g.name) ? ' <small>new</small>' : ''}</label>`).join('') || '<span class="dim">None yet</span>';
   }
-}
-function steps() {
-  const link = $('#link').value.trim(), title = $('#title').value.trim(), key = $('#key').value.trim(), artist = $('#artist').value.trim();
-  $('#keyNote').textContent = key && S.used.includes(key) ? 'That key is already used by another track. Pick a different one.' : '';
-  const out = $('#steps'); copies = [];
-  const step = (t, d, code) => { copies.push(code); return `<div class="step"><b>${t}</b><p>${d}</p><pre>${esc(code)}</pre><button class="btn" data-c="${copies.length - 1}">Copy</button></div>`; };
-  const ng = (g, kind, k) => {
-    const where = kind === 'album' ? 'albums' : 'playlists', art = kind === 'album' && g.art ? `"art": ${j(g.art)}, ` : '';
-    return step(`C. New ${kind} “${esc(g.name)}”`, `Paste this on a new line directly under <code>"${where}": [</code>.` + (art ? ` Also upload the cover image <code>${esc(g.art)}</code> to your repo, next to <code>index.html</code>.` : ''), `    { "name": ${j(g.name)}, ${art}"tracks": [${k ? j(k) : ''}] },`);
-  };
-  const fresh = [...S.albums.filter(g => !g.inFile).map(g => [g, 'album']), ...S.playlists.filter(g => !g.inFile).map(g => [g, 'playlist'])];
-  const note = '<p class="dim">If a list you paste under is empty, delete the comma at the end of what you pasted.</p>';
-  if (!link || !title || !key) {
-    out.innerHTML = fresh.length ? '<p class="dim">No track filled in, so these new lists start empty.</p>' + fresh.map(([g, kind]) => ng(g, kind, '')).join('') + note
-      : '<p class="dim">Fill in the link, title and key above and your code appears here. To make a new album or playlist, add it in step 2.</p>';
-    return;
-  }
-  const chosen = [...S.albums.filter(g => sel.albums.has(g.name)).map(g => [g, 'album']), ...S.playlists.filter(g => sel.playlists.has(g.name)).map(g => [g, 'playlist'])];
-  let h = '';
-  if (!/dropbox\.com/i.test(link)) h += '<p class="warn">That doesn’t look like a Dropbox link.</p>';
-  if (!chosen.length) h += '<p class="dim">Not in an album or playlist yet, so it will only show under “All tracks”.</p>';
-  h += step('A. Add the track', 'Paste this on a new line directly under <code>"tracks": {</code>', `    ${j(key)}: { "title": ${j(title)}, "url": ${j(link)}${artist ? ', "artist": ' + j(artist) : ''} },`);
-  for (const [g, kind] of chosen) {
-    if (g.inFile) h += step(`B. Add to the ${kind} “${esc(g.name)}”`, `Find the line starting <code>{ "name": ${esc(j(g.name))}</code> and add this just before its closing <code>]</code>. If its list is empty, leave out the comma.`, `, ${j(key)}`);
-    else h += ng(g, kind, key);
-  }
-  out.innerHTML = h + note;
+  $('#dirty').textContent = dirty ? 'You have changes that aren’t uploaded yet. The file below includes them.' : 'No changes yet. This is the same as your current file.';
+  $('#out').textContent = fmtLib(lib);
 }
 
 function copy(t, b) {
   const ok = () => { b.textContent = 'Copied'; setTimeout(() => { b.textContent = 'Copy'; }, 1500); };
   const fb = () => {
     const x = document.createElement('textarea'); x.value = t; x.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(x); x.select();
-    try { document.execCommand('copy'); ok(); } catch { b.textContent = 'Select the code and copy it by hand'; }
+    try { document.execCommand('copy'); ok(); } catch { b.textContent = 'Select the text and copy it by hand'; }
     x.remove();
   };
   if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok, fb); else fb();
 }
 
-$('#link').oninput = () => { if (!titleTouched) $('#title').value = titleFrom($('#link').value); if (!keyTouched) autoKey(); steps(); };
-$('#title').oninput = () => { titleTouched = true; if (!keyTouched) autoKey(); steps(); };
-$('#key').oninput = () => { keyTouched = true; steps(); };
-$('#artist').oninput = steps;
+/* ---------- events ---------- */
+$('#link').oninput = () => { if (!titleTouched) $('#title').value = titleFrom($('#link').value); if (!keyTouched) autoKey(); notes(); };
+$('#title').oninput = () => { titleTouched = true; if (!keyTouched) autoKey(); };
+$('#key').oninput = () => { keyTouched = true; notes(); };
 document.addEventListener('change', e => {
-  const c = e.target.closest('input[data-k]'); if (!c) return;
-  const s = sel[c.dataset.k]; c.checked ? s.add(c.dataset.n) : s.delete(c.dataset.n); chips(); steps();
+  const c = e.target.closest && e.target.closest('input[data-k]'); if (!c) return;
+  const s = sel[c.dataset.k]; c.checked ? s.add(c.dataset.n) : s.delete(c.dataset.n); render();
 });
-$('#aal').onclick = () => {
-  const n = $('#nal').value.trim(); if (!n || S.albums.some(g => g.name === n)) return;
-  S.albums.push({ name: n, art: $('#nar').value.trim(), inFile: false }); sel.albums.add(n); $('#nal').value = $('#nar').value = ''; save(); chips(); steps();
+$('#tracks').onclick = e => {
+  const b = e.target.closest('[data-rm]'); if (!b) return;
+  const k = b.dataset.rm; delete lib.tracks[k];
+  [...lib.albums, ...lib.playlists].forEach(g => { g.tracks = g.tracks.filter(x => x !== k); });
+  newT.delete(k); render();
 };
-$('#apl').onclick = () => {
-  const n = $('#npl').value.trim(); if (!n || S.playlists.some(g => g.name === n)) return;
-  S.playlists.push({ name: n, inFile: false }); sel.playlists.add(n); $('#npl').value = ''; save(); chips(); steps();
+function addGroup(kind, nameEl, artEl) {
+  const n = nameEl.value.trim(); if (!n || lib[kind].some(g => g.name === n)) return;
+  const g = { name: n }; const art = artEl && artEl.value.trim(); if (art) g.art = art;
+  g.tracks = []; lib[kind].push(g); sel[kind].add(n); newG.add(kind + n);
+  nameEl.value = ''; if (artEl) artEl.value = ''; render();
+}
+$('#aal').onclick = () => addGroup('albums', $('#nal'), $('#nar'));
+$('#apl').onclick = () => addGroup('playlists', $('#npl'), null);
+$('#addt').onclick = () => {
+  const link = $('#link').value.trim(), title = $('#title').value.trim(), key = $('#key').value.trim(), artist = $('#artist').value.trim();
+  if (!link || !title || !key) return toast('Fill in the link, title and key first');
+  if (lib.tracks[key]) return notes();
+  lib.tracks[key] = artist ? { title, url: link, artist } : { title, url: link };
+  for (const k of ['albums', 'playlists']) lib[k].forEach(g => { if (sel[k].has(g.name) && !g.tracks.includes(key)) g.tracks.push(key); });
+  newT.add(key); ['#link', '#title', '#key', '#artist'].forEach(i => { $(i).value = ''; });
+  sel.albums.clear(); sel.playlists.clear(); titleTouched = keyTouched = false; notes(); render(); toast('Added “' + title + '”');
 };
-$('#steps').onclick = e => { const b = e.target.closest('[data-c]'); if (b) copy(copies[+b.dataset.c], b); };
-$('#done').onclick = () => {
-  const key = $('#key').value.trim(); if (key && !S.used.includes(key)) S.used.push(key);
-  const had = $('#link').value.trim() && $('#title').value.trim() && key;
-  S.albums.forEach(g => { if (!had || sel.albums.has(g.name)) g.inFile = true; });
-  S.playlists.forEach(g => { if (!had || sel.playlists.has(g.name)) g.inFile = true; });
-  ['#link', '#title', '#key', '#artist'].forEach(i => { $(i).value = ''; });
-  sel.albums.clear(); sel.playlists.clear(); titleTouched = keyTouched = false;
-  save(); chips(); steps(); scrollTo({ top: 0, behavior: 'smooth' }); toast('Saved. Ready for the next track.');
+$('#copy').onclick = () => copy(fmtLib(lib), $('#copy'));
+$('#dl').onclick = () => {
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([fmtLib(lib)], { type: 'application/json' }));
+  a.download = 'library.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 };
-$('#reset').onclick = () => { S = JSON.parse(JSON.stringify(DEF)); sel.albums.clear(); sel.playlists.clear(); save(); chips(); steps(); toast('Lists reset'); };
+$('#lm').onclick = () => setLib($('#paste').value, 'the pasted text');
+$('#file').onchange = async e => { const f = e.target.files[0]; if (f) setLib(await f.text(), 'the file you chose'); };
 
-chips(); steps();
+loadSite();
 </script>
 </body>
 </html>
