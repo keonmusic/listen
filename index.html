@@ -51,12 +51,16 @@ padding:10px 18px calc(10px + env(safe-area-inset-bottom));display:grid;grid-tem
 .ib:hover{color:var(--text)}.ib.on{color:var(--acc)}
 [data-act=lp][data-m=one]::after{content:'1';position:absolute;right:5px;bottom:4px;font-size:11px;font-weight:600}
 .pp{width:46px;height:46px;cursor:pointer;background:var(--acc);color:#04120d;display:grid;place-items:center;clip-path:var(--ch)}
+.ctl [data-act=pv],.ctl [data-act=nx]{width:46px;height:46px;background:var(--acc);color:var(--text);isolation:isolate;clip-path:var(--ch)}
+.ctl [data-act=pv]::before,.ctl [data-act=nx]::before{content:'';position:absolute;inset:2px;z-index:-1;background:var(--fill,var(--panel));
+clip-path:polygon(7.8px 0,100% 0,100% calc(100% - 7.8px),calc(100% - 7.8px) 100%,0 100%,0 7.8px)}
+.npw{--fill:var(--bg)}
 .sk{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;color:var(--dim);font-size:.9em;font-variant-numeric:tabular-nums}
 .right{display:flex;justify-content:flex-end;align-items:center;gap:8px;color:var(--dim)}
 input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:20px;cursor:pointer;width:100%}
 .vslot{display:flex;align-items:center;gap:8px;color:var(--dim)}
 input.vol{width:96px}
-.seek{position:relative;height:28px;--p:0%;cursor:pointer}
+.seek{position:relative;height:28px;--p:0%;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}
 .seek::before{content:'';position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;background:#1a2f33}
 .fill{position:absolute;left:0;top:50%;height:4px;margin-top:-2px;width:var(--p);background:linear-gradient(90deg,var(--acc),var(--acc2),#9fb4ff)}
 .head{position:absolute;top:50%;left:var(--p);width:40px;height:40px;margin:-20px 0 0 -20px;cursor:pointer;touch-action:none}
@@ -77,11 +81,11 @@ padding:calc(10px + env(safe-area-inset-top,0px)) 20px calc(18px + env(safe-area
 .npw .npinfo{margin:0}
 .npw .vslot,.npw input.vol{width:100%}
 .npw .ctl{justify-content:space-evenly;gap:0;margin:0 -20px}
-.npw .ctl .ib{width:62px;height:62px}
-.npw .ctl .ib .ic{width:31px;height:31px}
-.npw .ctl .pp{width:78px;height:78px}
-.npw .ctl .pp .ic{width:36px;height:36px}
-.npw .ctl [data-act=lp][data-m=one]::after{right:11px;bottom:10px;font-size:14px}
+.npw .ctl .ib{width:54px;height:54px}
+.npw .ctl .ib .ic{width:28px;height:28px}
+.npw .ctl .pp,.npw .ctl [data-act=pv],.npw .ctl [data-act=nx]{width:68px;height:68px}
+.npw .ctl .pp .ic,.npw .ctl [data-act=pv] .ic,.npw .ctl [data-act=nx] .ic{width:32px;height:32px}
+.npw .ctl [data-act=lp][data-m=one]::after{right:9px;bottom:8px;font-size:13px}
 @media(max-width:760px),(pointer:coarse){.vslot{display:none}}
 input[type=range]::-webkit-slider-runnable-track{height:4px;background:linear-gradient(90deg,var(--acc),var(--acc2),#9fb4ff) 0 0/var(--p,0%) 100% no-repeat,#1a2f33}
 input[type=range]::-moz-range-track{height:4px;background:#1a2f33}
@@ -110,6 +114,8 @@ main{padding:20px 14px 12px}
 .bar .ctl .ib .ic{width:27px;height:27px}
 .bar .ctl .pp{width:64px;height:64px}
 .bar .ctl .pp .ic{width:30px;height:30px}
+.bar .ctl [data-act=pv],.bar .ctl [data-act=nx]{width:64px;height:64px}
+.bar .ctl [data-act=pv] .ic,.bar .ctl [data-act=nx] .ic{width:30px;height:30px}
 .bar .ctl [data-act=lp][data-m=one]::after{right:9px;bottom:8px;font-size:13px}
 }
 @media(min-width:900px){
@@ -185,7 +191,6 @@ body{grid-template:"top top" auto "main np" minmax(0,1fr) "bar bar" auto/minmax(
 
 <script>
 const SITE = { artist: 'Keon Wu' };
-const SEEK_ON_CLICK = true; // true = clicking the progress bar also jumps there; false = only dragging the playhead seeks
 /* Tracks, albums and playlists live in library.json, in the same folder as this file. */
 
 const $ = s => document.querySelector(s), qa = s => document.querySelectorAll(s), a = new Audio(), qp = $('#qp');
@@ -346,12 +351,22 @@ const VOL = `<svg class="ic"><use href="#i-vol"/></svg><input class="vol" type="
 const seeks = [];
 const setSeek = (p, t) => seeks.forEach(s => { s.el.style.setProperty('--p', p * 100 + '%'); s.el.setAttribute('aria-valuenow', Math.round(p * 100)); if (t !== undefined) s.tc.textContent = t; });
 function wireSeek(root) {
-  const el = root.querySelector('.seek'), head = el.querySelector('.head');
+  const el = root.querySelector('.seek'); let t0 = null;
   const pctAt = e => { const r = el.getBoundingClientRect(); return Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)); };
-  head.onpointerdown = e => { if (!a.duration) return; e.preventDefault(); scrubbing = true; head.setPointerCapture(e.pointerId); el.classList.add('drag'); };
-  head.onpointermove = e => { if (!scrubbing) return; const p = pctAt(e); setSeek(p, fmt(p * a.duration)); };
-  head.onpointerup = head.onpointercancel = e => { if (!scrubbing) return; scrubbing = false; el.classList.remove('drag'); if (e.type === 'pointerup') a.currentTime = pctAt(e) * a.duration; };
-  el.onpointerdown = e => { if (SEEK_ON_CLICK && a.duration && e.target !== head) a.currentTime = pctAt(e) * a.duration; };
+  const show = e => { const p = pctAt(e); setSeek(p, fmt(p * a.duration)); };
+  /* Pressing anywhere on the bar grabs the playhead: it jumps to the pointer, follows it while held, and the song only seeks on release. */
+  el.onpointerdown = e => {
+    if (!a.duration || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    e.preventDefault(); scrubbing = true; t0 = cur; el.setPointerCapture(e.pointerId); el.classList.add('drag'); show(e);
+  };
+  el.onpointermove = e => { if (scrubbing) show(e); };
+  el.onpointerup = el.onpointercancel = e => {
+    if (!scrubbing) return;
+    scrubbing = false; el.classList.remove('drag');
+    if (e.type === 'pointerup' && cur === t0 && a.duration) a.currentTime = pctAt(e) * a.duration;
+    else setSeek(a.duration ? a.currentTime / a.duration : 0, fmt(a.currentTime));
+  };
+  el.onlostpointercapture = () => { if (scrubbing) { scrubbing = false; el.classList.remove('drag'); } };
   el.onkeydown = e => { const d = { ArrowRight: 5, ArrowLeft: -5 }[e.key]; if (d) { e.preventDefault(); a.currentTime += d; } };
   seeks.push({ el, tc: root.querySelector('.tc'), td: root.querySelector('.td') });
 }
