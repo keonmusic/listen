@@ -418,33 +418,39 @@ if ('mediaSession' in navigator) {
 const logo = $('.logo'), logoFallback = () => { const d = document.createElement('div'); d.className = 'brand'; d.textContent = 'Rogue Industries'; logo.replaceWith(d); };
 logo.onerror = logoFallback; if (logo.complete && !logo.naturalWidth) logoFallback();
 /* ---------- intro splash: add "splash": { "url": "<link to an mp4>" } to library.json.
-   Add "sound": false to play it muted, which lets browsers start it without a tap. ---------- */
+   Add "sound": false to play it muted, which lets browsers start it without a tap.
+   If a muted video is still refused (iPhone Low Power Mode does this), the intro is skipped entirely. ---------- */
 function runSplash(cfg) {
   if (!cfg || !cfg.url) return;
   let seen = false; try { seen = !!sessionStorage.getItem('ri.splashSeen'); } catch {}
   if (seen && cfg.once !== 'always' && !/[?&]splash\b/.test(location.search)) return;
-  const sp = $('#splash'), v = $('#sv'), msg = $('#spmsg'), hint = $('#sphint');
+  const sp = $('#splash'), v = $('#sv'), msg = $('#spmsg'), hint = $('#sphint'), muted = cfg.sound === false;
   let state = 'loading', t0 = 0;
-  const finish = () => {
+  const finish = instant => {
     if (state === 'done') return; state = 'done'; v.pause();
     try { sessionStorage.setItem('ri.splashSeen', '1'); } catch {}
-    document.removeEventListener('keydown', onKey); sp.classList.add('out');
-    setTimeout(() => { sp.hidden = true; v.removeAttribute('src'); v.load(); }, 400);
+    document.removeEventListener('keydown', onKey);
+    const hide = () => { sp.hidden = true; v.removeAttribute('src'); v.load(); };
+    if (instant === true) hide(); else { sp.classList.add('out'); setTimeout(hide, 400); }
   };
-  const play = () => v.play().then(() => { state = 'playing'; t0 = Date.now(); hint.hidden = false; }, e => {
-    if (e && e.name === 'NotAllowedError') { state = 'needtap'; msg.textContent = 'Tap to enter'; msg.classList.add('tap'); } else finish();
+  const play = () => v.play().then(() => { state = 'playing'; t0 = Date.now(); }, e => {
+    if (e && e.name === 'NotAllowedError') {
+      if (muted) finish(true);
+      else { state = 'needtap'; hint.hidden = true; msg.textContent = 'Tap to enter'; msg.classList.add('tap'); }
+    } else finish();
   });
   const press = () => {
-    if (state === 'needtap') { state = 'loading'; msg.classList.remove('tap'); msg.textContent = 'Loading…'; play(); }
+    if (state === 'needtap') { state = 'loading'; msg.classList.remove('tap'); msg.textContent = 'Loading…'; hint.hidden = false; play(); }
     else if (state === 'loading' || (state === 'playing' && Date.now() - t0 > 500)) finish();
   };
   const onKey = e => { if (e.key === 'Escape') finish(); else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); press(); } };
-  v.onended = v.onerror = finish;
+  v.onended = v.onerror = () => finish();
   v.onwaiting = () => { if (state === 'playing') msg.textContent = 'Loading…'; };
   v.onplaying = () => { msg.textContent = ''; };
   sp.onclick = press; document.addEventListener('keydown', onKey);
-  msg.textContent = 'Loading…'; hint.hidden = true; sp.classList.remove('out'); sp.hidden = false;
-  v.muted = cfg.sound === false; v.src = direct(cfg.url); play();
+  hint.textContent = matchMedia('(pointer:coarse)').matches ? 'Tap to skip' : 'Click to skip';
+  msg.textContent = 'Loading…'; hint.hidden = false; sp.classList.remove('out'); sp.hidden = false;
+  v.muted = muted; v.src = direct(cfg.url); play();
 }
 load();
 </script>
