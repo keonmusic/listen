@@ -1,6 +1,6 @@
 {
   "artist": "Keon Wu",
-  "splash": { "url": "splashscreen.mp4", "sound": false },
+  "splash": { "url": "SplashScreen.mp4", "sound": false },
   "tracks": {
     "void": { "title": "Void", "url": "https://www.dropbox.com/scl/fi/2inp8puzke66t1ylxi5gf/Void.mp3?rlkey=exw5q1vtkouqtjojj1z4rki0l&st=v16yb7fo&dl=0" },
     "spider": { "title": "It’s big... AND HAS SPIDER LEGS", "url": "https://www.dropbox.com/scl/fi/w0a9ruozg2h3ai12a77tq/It-s-big...-AND-HAS-SPIDER-LEGS.mp3?rlkey=2pzetrbnyjmiwqwdg54km20ew&st=pcck4d84&dl=0" },
