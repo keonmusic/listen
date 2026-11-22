@@ -124,7 +124,14 @@ body{grid-template:"top top" auto "main np" minmax(0,1fr) "bar bar" auto/minmax(
 .npw{display:none}
 #art{cursor:default}
 }
-@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.splash{position:fixed;inset:0;z-index:30;background:#000;cursor:pointer;opacity:1;transition:opacity .35s}
+.splash.out{opacity:0;pointer-events:none}
+.splash video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;background:#000}
+.spmsg{position:absolute;left:0;right:0;bottom:18%;text-align:center;font:700 clamp(20px,4vw,30px)/1 Goldman,sans-serif;color:var(--acc);letter-spacing:.04em}
+.spmsg.tap{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.4}}
+.sphint{position:absolute;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));font:400 14px Goldman,sans-serif;color:var(--dim)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}.spmsg.tap{animation:none}}
 </style>
 </head>
 <body>
@@ -187,6 +194,11 @@ body{grid-template:"top top" auto "main np" minmax(0,1fr) "bar bar" auto/minmax(
     <div class="vslot" data-slot="vol"></div>
   </div>
 </div>
+<div id="splash" class="splash" hidden role="dialog" aria-label="Intro video">
+  <video id="sv" playsinline preload="auto"></video>
+  <div id="spmsg" class="spmsg"></div>
+  <div id="sphint" class="sphint" hidden>Tap to skip</div>
+</div>
 <div id="toast" role="status"></div>
 
 <script>
@@ -218,15 +230,16 @@ function setLibrary(lib) {
   return bad;
 }
 async function load() {
+  let splashCfg = null;
   try {
     const r = await fetch('library.json', { cache: 'no-cache' });
     if (!r.ok) throw new Error('HTTP ' + r.status);
-    const bad = setLibrary(await r.json());
+    const lib = await r.json(); splashCfg = lib.splash; const bad = setLibrary(lib);
     if (bad.length) { console.warn('library.json: unknown track keys', bad); toast('library.json has unknown track keys: ' + bad.join(', ')); }
   } catch (e) {
     loadErr = 'Couldn’t load library.json (' + e.message + '). Check it is in the same folder as index.html and is valid JSON.';
   }
-  renderSide(); ui(); renderQ();
+  renderSide(); ui(); renderQ(); runSplash(splashCfg);
 }
 const sub = t => [t.artist || SITE.artist, t.album].filter(Boolean).join(' – ');
 const artUrl = t => t && t.art ? new URL(encodeURI(t.art), location.href).href : '';
@@ -390,6 +403,7 @@ $('#npx').onclick = () => openNP(false);
 wide.addEventListener('change', e => { if (e.matches) openNP(false); });
 
 addEventListener('keydown', e => {
+  if (!$('#splash').hidden) return;
   if (e.key === 'Escape') { openQ(false); openNP(false); }
   if (e.target !== document.body) return;
   if (e.code === 'Space') { e.preventDefault(); toggle(); }
@@ -403,6 +417,35 @@ if ('mediaSession' in navigator) {
 
 const logo = $('.logo'), logoFallback = () => { const d = document.createElement('div'); d.className = 'brand'; d.textContent = 'Rogue Industries'; logo.replaceWith(d); };
 logo.onerror = logoFallback; if (logo.complete && !logo.naturalWidth) logoFallback();
+/* ---------- intro splash: add "splash": { "url": "<link to an mp4>" } to library.json.
+   Add "sound": false to play it muted, which lets browsers start it without a tap. ---------- */
+function runSplash(cfg) {
+  if (!cfg || !cfg.url) return;
+  let seen = false; try { seen = !!sessionStorage.getItem('ri.splashSeen'); } catch {}
+  if (seen && cfg.once !== 'always' && !/[?&]splash\b/.test(location.search)) return;
+  const sp = $('#splash'), v = $('#sv'), msg = $('#spmsg'), hint = $('#sphint');
+  let state = 'loading', t0 = 0;
+  const finish = () => {
+    if (state === 'done') return; state = 'done'; v.pause();
+    try { sessionStorage.setItem('ri.splashSeen', '1'); } catch {}
+    document.removeEventListener('keydown', onKey); sp.classList.add('out');
+    setTimeout(() => { sp.hidden = true; v.removeAttribute('src'); v.load(); }, 400);
+  };
+  const play = () => v.play().then(() => { state = 'playing'; t0 = Date.now(); hint.hidden = false; }, e => {
+    if (e && e.name === 'NotAllowedError') { state = 'needtap'; msg.textContent = 'Tap to enter'; msg.classList.add('tap'); } else finish();
+  });
+  const press = () => {
+    if (state === 'needtap') { state = 'loading'; msg.classList.remove('tap'); msg.textContent = 'Loading…'; play(); }
+    else if (state === 'loading' || (state === 'playing' && Date.now() - t0 > 500)) finish();
+  };
+  const onKey = e => { if (e.key === 'Escape') finish(); else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); press(); } };
+  v.onended = v.onerror = finish;
+  v.onwaiting = () => { if (state === 'playing') msg.textContent = 'Loading…'; };
+  v.onplaying = () => { msg.textContent = ''; };
+  sp.onclick = press; document.addEventListener('keydown', onKey);
+  msg.textContent = 'Loading…'; hint.hidden = true; sp.classList.remove('out'); sp.hidden = false;
+  v.muted = cfg.sound === false; v.src = direct(cfg.url); play();
+}
 load();
 </script>
 </body>
