@@ -120,7 +120,7 @@ main{padding:20px 14px 12px}
 .bar .ctl [data-act=lp][data-m=one]::after{right:9px;bottom:8px;font-size:13px}
 }
 @media(min-width:900px){
-body{grid-template:"top top" auto "main np" minmax(0,1fr) "bar bar" auto/minmax(0,1fr) 340px}
+body{grid-template:"top top top" auto "side main np" minmax(0,1fr) "bar bar bar" auto/232px minmax(0,1fr) 340px}
 .np{display:block}
 .npw{display:none}
 #art{cursor:default}
@@ -153,11 +153,6 @@ border-bottom:1px solid transparent;border-image:linear-gradient(90deg,transpare
 .np{background:linear-gradient(165deg,rgba(102,205,170,.10),rgba(63,182,201,.04) 45%,rgba(4,9,10,.35));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
 border-left:1px solid rgba(102,205,170,.45);box-shadow:inset 18px 0 40px -20px rgba(102,205,170,.25),-14px 0 50px rgba(63,182,201,.10)}
 .bar{background:rgba(5,17,19,.74);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 -10px 40px rgba(63,182,201,.12)}
-.np::after,.bar::after{content:'';position:absolute;inset:8px;pointer-events:none;opacity:.7;background:
-linear-gradient(var(--acc),var(--acc)) 0 0/16px 1px no-repeat,linear-gradient(var(--acc),var(--acc)) 0 0/1px 16px no-repeat,
-linear-gradient(var(--acc),var(--acc)) 100% 0/16px 1px no-repeat,linear-gradient(var(--acc),var(--acc)) 100% 0/1px 16px no-repeat,
-linear-gradient(var(--acc),var(--acc)) 0 100%/16px 1px no-repeat,linear-gradient(var(--acc),var(--acc)) 0 100%/1px 16px no-repeat,
-linear-gradient(var(--acc),var(--acc)) 100% 100%/16px 1px no-repeat,linear-gradient(var(--acc),var(--acc)) 100% 100%/1px 16px no-repeat}
 .row{border-bottom-color:rgba(102,205,170,.16);transition:background .2s}
 .row:hover{background:linear-gradient(90deg,rgba(102,205,170,.10),transparent 70%)}
 .row.on{background:linear-gradient(90deg,rgba(102,205,170,.18),rgba(63,182,201,.04) 70%);box-shadow:inset 2px 0 0 var(--acc)}
@@ -165,8 +160,8 @@ h1{text-shadow:2px 0 rgba(63,182,201,.5),-2px 0 rgba(125,255,176,.35),0 0 22px r
 .npt,.brand{text-shadow:1.5px 0 rgba(63,182,201,.45),-1.5px 0 rgba(125,255,176,.3),0 0 14px rgba(102,205,170,.3)}
 .npglow{position:relative;filter:drop-shadow(0 0 8px rgba(102,205,170,.55)) drop-shadow(0 0 26px rgba(63,182,201,.28))}
 .npglow::before,.npglow::after{content:'';position:absolute;inset:0;clip-path:var(--ch);pointer-events:none}
-.npglow::before{background:rgba(63,182,201,.20);transform:translate(calc(-9px + var(--mx)*-7px),calc(9px + var(--my)*-5px))}
-.npglow::after{background:rgba(125,255,176,.14);transform:translate(calc(12px + var(--mx)*-6px),calc(-12px + var(--my)*-5px))}
+.npglow::before{background:rgba(63,182,201,.20);transform:translate(calc(-5px + var(--mx)*-5px),calc(5px + var(--my)*-4px))}
+.npglow::after{background:rgba(125,255,176,.14);transform:translate(calc(7px + var(--mx)*-4px),calc(-7px + var(--my)*-4px))}
 .npglow .npart{position:relative;z-index:1}
 .npart::after{content:'';position:absolute;inset:0;pointer-events:none;
 background:repeating-linear-gradient(to bottom,rgba(0,0,0,.2) 0 1px,transparent 1px 3px),linear-gradient(120deg,transparent 40%,rgba(160,255,230,.2) 50%,transparent 60%);
@@ -184,26 +179,38 @@ background-size:100% 100%,250% 100%;animation:sheen 6s ease-in-out infinite}
 
 /* ----- layered, semi-transparent floating buttons ----- */
 .ctl button[data-act],#qb,#npx,.go{position:relative;isolation:isolate;border:0;clip-path:none;cursor:pointer;background:var(--face) center/100% 100% no-repeat;
---dx:calc(var(--mx)*-3px);--dy:calc(var(--my)*-2px);filter:drop-shadow(0 0 7px rgba(102,205,170,.4))}
+--dx:calc(var(--mx)*-2px);--dy:calc(var(--my)*-1.5px);filter:drop-shadow(0 0 7px rgba(102,205,170,.4))}
 .ctl button[data-act=pp]{background-image:var(--face-hi)}
 .go{background-image:var(--go-face);width:118px;height:40px;padding:0;justify-content:center;font-weight:600;color:var(--text);
 text-shadow:2px 0 rgba(63,182,201,.5),-2px 0 rgba(125,255,176,.35),0 0 12px rgba(102,205,170,.4)}
 .ctl button[data-act]::before,#qb::before,#npx::before,.go::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;clip-path:none;
-background:var(--plate) center/100% 100% no-repeat;transform:translate(calc(5px + var(--dx)),calc(6px + var(--dy)));transition:transform .18s}
+background:var(--plate) center/100% 100% no-repeat;transform:translate(calc(2px + var(--dx)),calc(3px + var(--dy)));transition:transform .18s}
 .go::before{background-image:var(--go-plate)}
-.ctl button[data-act]::after,#qb::after,#npx::after,.go::after{content:'';position:absolute;inset:-3px!important;z-index:2;pointer-events:none;opacity:.85;
-background:var(--frame) center/100% 100% no-repeat;transform:translate(calc(-3px - var(--dx)),calc(-3px - var(--dy)));transition:transform .18s}
+.ctl button[data-act]::after,#qb::after,#npx::after,.go::after{content:'';position:absolute;inset:-1px!important;z-index:2;pointer-events:none;opacity:.85;
+background:var(--frame) center/100% 100% no-repeat;transform:translate(calc(-1px - var(--dx)),calc(-1px - var(--dy)));transition:transform .18s}
 .go::after{background-image:var(--go-frame)}
 @media(hover:hover){
-.ctl button[data-act]:hover::before,#qb:hover::before,#npx:hover::before,.go:hover::before{transform:translate(calc(8px + var(--dx)),calc(9px + var(--dy)))}
-.ctl button[data-act]:hover::after,#qb:hover::after,#npx:hover::after,.go:hover::after{transform:translate(calc(-5px - var(--dx)),calc(-5px - var(--dy)))}}
-.ctl button[data-act]:active::before,#qb:active::before,#npx:active::before,.go:active::before{transform:translate(2px,2px)}
-.ctl button[data-act]:active::after,#qb:active::after,#npx:active::after,.go:active::after{transform:translate(-1px,-1px)}
+.ctl button[data-act]:hover::before,#qb:hover::before,#npx:hover::before,.go:hover::before{transform:translate(calc(4px + var(--dx)),calc(5px + var(--dy)))}
+.ctl button[data-act]:hover::after,#qb:hover::after,#npx:hover::after,.go:hover::after{transform:translate(calc(-2px - var(--dx)),calc(-2px - var(--dy)))}}
+.ctl button[data-act]:active::before,#qb:active::before,#npx:active::before,.go:active::before{transform:translate(1px,1px)}
+.ctl button[data-act]:active::after,#qb:active::after,#npx:active::after,.go:active::after{transform:translate(0,0)}
 .ctl button .ic,#qb .ic,#npx .ic,.go .ic{filter:drop-shadow(1.5px 0 rgba(63,182,201,.65)) drop-shadow(-1.5px 0 rgba(125,255,176,.5)) drop-shadow(0 0 5px rgba(102,205,170,.55))}
 .ctl .ib{color:#bfe9dc}.ctl .ib.on{color:var(--acc)}.ctl .pp{color:#f2fffa}
 .bd{display:none;position:absolute;right:8px;bottom:6px;font:600 13px/1 Goldman,sans-serif;font-style:normal;color:var(--acc);z-index:3;text-shadow:0 0 6px rgba(102,205,170,.7)}
 [data-act=lp][data-m=one] .bd{display:block}
 .viz{position:absolute;left:-22px;top:-22px;width:calc(100% + 44px);height:calc(100% + 44px);pointer-events:none;z-index:0}
+
+/* ----- left sidebar (wide screens) ----- */
+.side{display:none;grid-area:side;position:relative;z-index:1;padding:18px 14px;overflow:auto;
+background:linear-gradient(to right,rgba(102,205,170,.08),rgba(63,182,201,.02));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+border-right:1px solid rgba(102,205,170,.4);box-shadow:14px 0 50px rgba(63,182,201,.08),inset -18px 0 40px -20px rgba(102,205,170,.2)}
+#pls{display:flex;flex-direction:column;gap:2px}
+#pls h4{font:700 12px/1 Goldman,sans-serif;letter-spacing:.14em;color:var(--dim);margin:20px 12px 6px}
+.si{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;text-align:left;color:#bfe9dc;background:none;border:0;border-left:2px solid transparent;cursor:pointer;font:inherit;transition:background .2s}
+.si:hover{background:linear-gradient(90deg,rgba(102,205,170,.12),transparent)}
+.si.on{color:var(--acc);border-left-color:var(--acc);background:linear-gradient(90deg,rgba(102,205,170,.22),rgba(63,182,201,.04) 80%);box-shadow:inset 0 0 18px rgba(102,205,170,.10);
+text-shadow:1.5px 0 rgba(63,182,201,.45),-1.5px 0 rgba(125,255,176,.3),0 0 12px rgba(102,205,170,.35)}
+@media(min-width:900px){.side{display:block}.top .sel{display:none}}
 </style>
 </head>
 <body>
@@ -230,6 +237,7 @@ background:var(--frame) center/100% 100% no-repeat;transform:translate(calc(-3px
   <img class="logo" src="RI%20logo%20nobackground.png" alt="Rogue Industries">
   <label class="sel"><span class="vh">Choose an album or playlist</span><select id="view"></select></label>
 </header>
+<aside class="side" aria-label="Albums and playlists"><nav id="pls"></nav></aside>
 
 <main>
   <div class="hd">
@@ -366,11 +374,17 @@ function toggle() {
 function qAdd(t, top) { top ? queue.unshift(t) : queue.push(t); toast(top ? 'Playing next: ' + t.title : 'Added to queue: ' + t.title); renderQ(); }
 
 /* ---------- rendering ---------- */
+function renderNav() {
+  const nA = ALBUMS.length, it = (l, i) => `<button class="si${i === view ? ' on' : ''}" data-v="${i}">${esc(l.name)}<small>${l.tracks.length}</small></button>`;
+  const grp = (label, from, to) => to > from ? `<h4>${label}</h4>` + lists.slice(from, to).map((l, k) => it(l, from + k)).join('') : '';
+  $('#pls').innerHTML = it(lists[0], 0) + grp('Albums', 1, 1 + nA) + grp('Playlists', 1 + nA, lists.length);
+}
 function renderSide() {
   const opt = (l, i) => `<option value="${i}"${i === view ? ' selected' : ''}>${esc(l.name)}</option>`;
   const grp = (label, from, to) => to > from ? `<optgroup label="${label}">${lists.slice(from, to).map((l, k) => opt(l, from + k)).join('')}</optgroup>` : '';
   const nA = ALBUMS.length;
   $('#view').innerHTML = opt(lists[0], 0) + grp('Albums', 1, 1 + nA) + grp('Playlists', 1 + nA, lists.length);
+  renderNav();
 }
 function renderList() {
   const L = lists[view].tracks;
@@ -411,7 +425,8 @@ function ui() {
 function openQ(o) { qp.classList.toggle('open', o); qp.inert = !o; if (o) $('#qx').focus(); }
 
 /* ---------- events ---------- */
-$('#view').onchange = e => { view = +e.target.value; renderList(); $('main').scrollTop = 0; };
+$('#view').onchange = e => { view = +e.target.value; renderNav(); renderList(); $('main').scrollTop = 0; };
+$('#pls').onclick = e => { const b = e.target.closest('[data-v]'); if (!b) return; view = +b.dataset.v; $('#view').value = view; renderNav(); renderList(); $('main').scrollTop = 0; };
 $('#go').onclick = () => { const L = lists[view].tracks; if (L.length) playFrom(L, shuffle ? Math.random() * L.length | 0 : 0); };
 $('#rows').onclick = e => {
   const b = e.target.closest('button[data-a]'); if (!b) return;
