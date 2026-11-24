@@ -129,10 +129,8 @@ body{grid-template:"top top top" auto "side main np" minmax(0,1fr) "bar bar bar"
 .splash.out{opacity:0;pointer-events:none}
 .splash video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;background:#000}
 .spmsg{position:absolute;left:0;right:0;bottom:18%;text-align:center;font:700 clamp(20px,4vw,30px)/1 Goldman,sans-serif;color:var(--acc);letter-spacing:.04em}
-.spmsg.tap{animation:pulse 1.6s ease-in-out infinite}
-@keyframes pulse{50%{opacity:.4}}
 .sphint{position:absolute;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));font:400 14px Goldman,sans-serif;color:var(--dim)}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}.spmsg.tap{animation:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
 /* ===== holographic layers (holo test build) ===== */
 :root{--mx:0;--my:0}
@@ -141,13 +139,11 @@ body{background:radial-gradient(120% 80% at 50% 0%,#07181b 0%,#04090a 55%,#02050
 .holo-grid{position:absolute;left:-60%;right:-60%;bottom:-6%;height:62%;
 background:linear-gradient(rgba(102,205,170,.26) 1px,transparent 1px) 0 0/100% 56px,linear-gradient(90deg,rgba(102,205,170,.26) 1px,transparent 1px) 0 0/56px 100%;
 transform:translateX(calc(var(--mx)*-18px)) perspective(520px) rotateX(64deg);transform-origin:50% 100%;
--webkit-mask-image:linear-gradient(to top,#000 0%,transparent 88%);mask-image:linear-gradient(to top,#000 0%,transparent 88%);animation:gridflow 4s linear infinite}
-@keyframes gridflow{to{background-position:0 56px,0 0}}
-.holo-scan{position:absolute;left:0;right:0;top:0;height:160px;background:linear-gradient(to bottom,transparent,rgba(102,205,170,.08) 50%,transparent);animation:sweep 8s linear infinite}
-@keyframes sweep{from{transform:translateY(-180px)}to{transform:translateY(100vh)}}
+-webkit-mask-image:linear-gradient(to top,#000 0%,transparent 88%);mask-image:linear-gradient(to top,#000 0%,transparent 88%)}
 body::after{content:'';position:fixed;inset:0;z-index:4;pointer-events:none;
 background:repeating-linear-gradient(to bottom,rgba(180,255,230,.028) 0 1px,transparent 1px 4px),radial-gradient(120% 90% at 50% 50%,transparent 60%,rgba(0,0,0,.45))}
 .top,main,.np,.bar{position:relative;z-index:1}
+.np,.bar{z-index:5}
 .top{background:linear-gradient(to bottom,rgba(6,22,25,.78),rgba(6,22,25,.28));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
 border-bottom:1px solid transparent;border-image:linear-gradient(90deg,transparent,rgba(102,205,170,.75),rgba(63,182,201,.75),transparent) 1;box-shadow:0 8px 30px rgba(63,182,201,.08)}
 .np{background:linear-gradient(165deg,rgba(102,205,170,.10),rgba(63,182,201,.04) 45%,rgba(4,9,10,.35));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
@@ -163,18 +159,10 @@ h1{text-shadow:2px 0 rgba(63,182,201,.5),-2px 0 rgba(125,255,176,.35),0 0 22px r
 .npglow::before{background:rgba(63,182,201,.20);transform:translate(calc(-5px + var(--mx)*-5px),calc(5px + var(--my)*-4px))}
 .npglow::after{background:rgba(125,255,176,.14);transform:translate(calc(7px + var(--mx)*-4px),calc(-7px + var(--my)*-4px))}
 .npglow .npart{position:relative;z-index:1}
-.npart::after{content:'';position:absolute;inset:0;pointer-events:none;
-background:repeating-linear-gradient(to bottom,rgba(0,0,0,.2) 0 1px,transparent 1px 3px),linear-gradient(120deg,transparent 40%,rgba(160,255,230,.2) 50%,transparent 60%);
-background-size:100% 100%,250% 100%;animation:sheen 6s ease-in-out infinite}
-@keyframes sheen{from{background-position:0 0,150% 0}to{background-position:0 0,-50% 0}}
 .npw .npglow{width:min(76vw,340px);margin:0 auto}
 .npw .npart{width:100%;margin:0}
 .npw{background:rgba(4,9,10,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 #qp{background:rgba(7,20,22,.88);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-left-color:rgba(102,205,170,.45)}
-.eq{display:flex;align-items:flex-end;gap:3px;height:46px;margin-top:22px}
-.eq i{flex:1;height:100%;background:linear-gradient(to top,var(--acc2),var(--acc),#7dffb0);transform-origin:bottom;transform:scaleY(.06);opacity:.85}
-@media(pointer:coarse){.holo-grid{animation:none}.holo-scan{display:none}}
-@media(prefers-reduced-motion:reduce){.holo-grid,.holo-scan,.npart::after,body.playing .eq i{animation:none!important}.holo-scan{display:none}}
 :root{--face:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237dffb0'/%3E%3Cstop offset='.55' stop-color='%2366cdaa'/%3E%3Cstop offset='1' stop-color='%233fb6c9'/%3E%3C/linearGradient%3E%3ClinearGradient id='f' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2366cdaa' stop-opacity='0.24'/%3E%3Cstop offset='1' stop-color='%233fb6c9' stop-opacity='0.06'/%3E%3C/linearGradient%3E%3Cpattern id='s' width='100' height='4.6' patternUnits='userSpaceOnUse'%3E%3Crect width='100' height='1.10' fill='%23b4ffe6' fill-opacity='.22'/%3E%3C/pattern%3E%3C/defs%3E%3Cpolygon points='14,0.8 99.2,0.8 99.2,86 86,99.2 0.8,99.2 0.8,14' fill='url(%23f)'/%3E%3Cpolygon points='14,0.8 99.2,0.8 99.2,86 86,99.2 0.8,99.2 0.8,14' fill='url(%23s)'/%3E%3Cpolygon points='14,0.8 99.2,0.8 99.2,86 86,99.2 0.8,99.2 0.8,14' fill='none' stroke='url(%23g)' stroke-width='1.4' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");--face-hi:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237dffb0'/%3E%3Cstop offset='.55' stop-color='%2366cdaa'/%3E%3Cstop offset='1' stop-color='%233fb6c9'/%3E%3C/linearGradient%3E%3ClinearGradient id='f' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2366cdaa' stop-opacity='0.5'/%3E%3Cstop offset='1' stop-color='%233fb6c9' stop-opacity='0.16'/%3E%3C/linearGradient%3E%3Cpattern id='s' width='100' height='4.6' patternUnits='userSpaceOnUse'%3E%3Crect width='100' height='1.10' fill='%23b4ffe6' fill-opacity='.22'/%3E%3C/pattern%3E%3C/defs%3E%3Cpolygon points='14,0.8 99.2,0.8 99.2,86 86,99.2 0.8,99.2 0.8,14' fill='url(%23f)'/%3E%3Cpolygon points='14,0.8 99.2,0.8 99.2,86 86,99.2 0.8,99.2 0.8,14' fill='url(%23s)'/%3E%3Cpolygon points='14,0.8 99.2,0.8 99.2,86 86,99.2 0.8,99.2 0.8,14' fill='none' stroke='url(%23g)' stroke-width='1.7' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");--plate:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237dffb0'/%3E%3Cstop offset='.55' stop-color='%2366cdaa'/%3E%3Cstop offset='1' stop-color='%233fb6c9'/%3E%3C/linearGradient%3E%3ClinearGradient id='f' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2366cdaa' stop-opacity='0.24'/%3E%3Cstop offset='1' stop-color='%233fb6c9' stop-opacity='0.06'/%3E%3C/linearGradient%3E%3Cpattern id='s' width='100' height='4.6' patternUnits='userSpaceOnUse'%3E%3Crect width='100' height='1.10' fill='%23b4ffe6' fill-opacity='.22'/%3E%3C/pattern%3E%3C/defs%3E%3Cpolygon points='14,0.8 99.2,0.8 99.2,86 86,99.2 0.8,99.2 0.8,14' fill='%233fb6c9' fill-opacity='.13' stroke='%233fb6c9' stroke-opacity='.5' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");--frame:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237dffb0'/%3E%3Cstop offset='.55' stop-color='%2366cdaa'/%3E%3Cstop offset='1' stop-color='%233fb6c9'/%3E%3C/linearGradient%3E%3ClinearGradient id='f' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2366cdaa' stop-opacity='0.24'/%3E%3Cstop offset='1' stop-color='%233fb6c9' stop-opacity='0.06'/%3E%3C/linearGradient%3E%3Cpattern id='s' width='100' height='4.6' patternUnits='userSpaceOnUse'%3E%3Crect width='100' height='1.10' fill='%23b4ffe6' fill-opacity='.22'/%3E%3C/pattern%3E%3C/defs%3E%3Cpolygon points='14,0.8 99.2,0.8 99.2,86 86,99.2 0.8,99.2 0.8,14' fill='none' stroke='url(%23g)' stroke-opacity='.8' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");--go-face:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 118 40' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237dffb0'/%3E%3Cstop offset='.55' stop-color='%2366cdaa'/%3E%3Cstop offset='1' stop-color='%233fb6c9'/%3E%3C/linearGradient%3E%3ClinearGradient id='f' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2366cdaa' stop-opacity='0.5'/%3E%3Cstop offset='1' stop-color='%233fb6c9' stop-opacity='0.16'/%3E%3C/linearGradient%3E%3Cpattern id='s' width='118' height='3' patternUnits='userSpaceOnUse'%3E%3Crect width='118' height='0.72' fill='%23b4ffe6' fill-opacity='.22'/%3E%3C/pattern%3E%3C/defs%3E%3Cpolygon points='9,0.8 117.2,0.8 117.2,31 109,39.2 0.8,39.2 0.8,9' fill='url(%23f)'/%3E%3Cpolygon points='9,0.8 117.2,0.8 117.2,31 109,39.2 0.8,39.2 0.8,9' fill='url(%23s)'/%3E%3Cpolygon points='9,0.8 117.2,0.8 117.2,31 109,39.2 0.8,39.2 0.8,9' fill='none' stroke='url(%23g)' stroke-width='1.7' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");--go-plate:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 118 40' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237dffb0'/%3E%3Cstop offset='.55' stop-color='%2366cdaa'/%3E%3Cstop offset='1' stop-color='%233fb6c9'/%3E%3C/linearGradient%3E%3ClinearGradient id='f' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2366cdaa' stop-opacity='0.24'/%3E%3Cstop offset='1' stop-color='%233fb6c9' stop-opacity='0.06'/%3E%3C/linearGradient%3E%3Cpattern id='s' width='118' height='3' patternUnits='userSpaceOnUse'%3E%3Crect width='118' height='0.72' fill='%23b4ffe6' fill-opacity='.22'/%3E%3C/pattern%3E%3C/defs%3E%3Cpolygon points='9,0.8 117.2,0.8 117.2,31 109,39.2 0.8,39.2 0.8,9' fill='%233fb6c9' fill-opacity='.13' stroke='%233fb6c9' stroke-opacity='.5' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");--go-frame:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 124 46' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237dffb0'/%3E%3Cstop offset='.55' stop-color='%2366cdaa'/%3E%3Cstop offset='1' stop-color='%233fb6c9'/%3E%3C/linearGradient%3E%3ClinearGradient id='f' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2366cdaa' stop-opacity='0.24'/%3E%3Cstop offset='1' stop-color='%233fb6c9' stop-opacity='0.06'/%3E%3C/linearGradient%3E%3Cpattern id='s' width='124' height='3' patternUnits='userSpaceOnUse'%3E%3Crect width='124' height='0.72' fill='%23b4ffe6' fill-opacity='.22'/%3E%3C/pattern%3E%3C/defs%3E%3Cpolygon points='9,0.8 123.2,0.8 123.2,37 115,45.2 0.8,45.2 0.8,9' fill='none' stroke='url(%23g)' stroke-opacity='.8' stroke-width='1' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E")}
 
 /* ----- layered, semi-transparent floating buttons ----- */
@@ -198,7 +186,6 @@ background:var(--frame) center/100% 100% no-repeat;transform:translate(calc(-1px
 .ctl .ib{color:#bfe9dc}.ctl .ib.on{color:var(--acc)}.ctl .pp{color:#f2fffa}
 .bd{display:none;position:absolute;right:8px;bottom:6px;font:600 13px/1 Goldman,sans-serif;font-style:normal;color:var(--acc);z-index:3;text-shadow:0 0 6px rgba(102,205,170,.7)}
 [data-act=lp][data-m=one] .bd{display:block}
-.viz{position:absolute;left:-22px;top:-22px;width:calc(100% + 44px);height:calc(100% + 44px);pointer-events:none;z-index:0}
 
 /* ----- left sidebar (wide screens) ----- */
 .side{display:none;grid-area:side;position:relative;z-index:1;padding:18px 14px;overflow:auto;
@@ -211,13 +198,22 @@ border-right:1px solid rgba(102,205,170,.4);box-shadow:14px 0 50px rgba(63,182,2
 .si.on{color:var(--acc);border-left-color:var(--acc);background:linear-gradient(90deg,rgba(102,205,170,.22),rgba(63,182,201,.04) 80%);box-shadow:inset 0 0 18px rgba(102,205,170,.10);
 text-shadow:1.5px 0 rgba(63,182,201,.45),-1.5px 0 rgba(125,255,176,.3),0 0 12px rgba(102,205,170,.35)}
 @media(min-width:900px){.side{display:block}.top .sel{display:none}}
+
+/* ----- title block, and the 3-line visualiser in the playing row ----- */
+#count{display:none}
+.hd{flex-direction:column;align-items:flex-start;gap:16px;margin-bottom:22px}
+.eqi{display:flex;align-items:flex-end;justify-content:center;gap:3px;height:18px}
+.eqi i{width:3px;height:100%;border-radius:1px;background:linear-gradient(to top,var(--acc2),var(--acc));box-shadow:0 0 6px rgba(102,205,170,.65);transform-origin:bottom;transform:scaleY(.5)}
+.pi{display:none;place-items:center}
+.row.on .eqi{display:flex}
+body:not(.playing) .row.on .eqi,.row.on:hover .eqi{display:none}
+body:not(.playing) .row.on .pi,.row.on:hover .pi{display:grid}
 </style>
 </head>
 <body>
 <div class="holo-bg" aria-hidden="true">
   <div class="holo-grid"></div>
-    <div class="holo-scan"></div>
-</div>
+  </div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></symbol>
 <symbol id="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z" fill="currentColor" stroke="none"/></symbol>
@@ -251,7 +247,6 @@ text-shadow:1.5px 0 rgba(63,182,201,.45),-1.5px 0 rgba(125,255,176,.3),0 0 12px 
   <div class="npglow"><div class="npart" data-art></div></div>
   <div class="npinfo"><div class="npt" data-title></div><div class="npa" data-artist></div><div class="npal" data-album></div></div>
 
-  <div class="eq" aria-hidden="true"></div>
 </aside>
 
 <footer class="bar">
@@ -281,7 +276,8 @@ text-shadow:1.5px 0 rgba(63,182,201,.45),-1.5px 0 rgba(125,255,176,.3),0 0 12px 
   </div>
 </div>
 <div id="splash" class="splash" hidden role="dialog" aria-label="Intro video">
-  <video id="sv" playsinline preload="auto"></video>
+  <video id="sv" playsinline preload="auto" data-early="SplashScreen.mp4"></video>
+<script>try{var sv=document.getElementById("sv");if(/[?&]splash\b/.test(location.search)||!sessionStorage.getItem("ri.splashSeen"))sv.src=sv.dataset.early}catch(e){}</script>
   <div id="spmsg" class="spmsg"></div>
   <div id="sphint" class="sphint" hidden>Tap to skip</div>
 </div>
@@ -392,7 +388,7 @@ function renderList() {
   $('#count').textContent = L.length + (L.length === 1 ? ' track' : ' tracks');
   $('#rows').innerHTML = L.length ? L.map((t, i) => {
     const on = cur && cur.url === t.url;
-    return `<li class="row${on ? ' on' : ''}" data-i="${i}"><button class="play" data-a="play"><span class="n">${on ? ic(a.paused ? 'play' : 'pause') : i + 1}</span>` +
+    return `<li class="row${on ? ' on' : ''}" data-i="${i}"><button class="play" data-a="play"><span class="n">${on ? '<span class="eqi"><i></i><i></i><i></i></span><span class="pi">' + ic(a.paused ? 'play' : 'pause') + '</span>' : i + 1}</span>` +
       `<span><span class="tt">${esc(t.title)}</span><small class="tt">${esc(sub(t))}</small></span></button>` +
       `<span class="d">${esc(t.dur || '')}</span>` +
       `<button class="mini" data-a="top" aria-label="Play next" title="Play next">${ic('top')}</button>` +
@@ -431,7 +427,7 @@ $('#go').onclick = () => { const L = lists[view].tracks; if (L.length) playFrom(
 $('#rows').onclick = e => {
   const b = e.target.closest('button[data-a]'); if (!b) return;
   const L = lists[view].tracks, i = +b.closest('li').dataset.i;
-  b.dataset.a === 'play' ? playFrom(L, i) : qAdd(L[i], b.dataset.a === 'top');
+  b.dataset.a === 'play' ? (cur && cur.url === L[i].url ? toggle() : playFrom(L, i)) : qAdd(L[i], b.dataset.a === 'top');
 };
 $('#qbody').onclick = e => {
   const b = e.target.closest('button'); if (!b) return;
@@ -514,7 +510,7 @@ logo.onerror = logoFallback; if (logo.complete && !logo.naturalWidth) logoFallba
    Add "sound": false to play it muted, which lets browsers start it without a tap.
    If a muted video is still refused (iPhone Low Power Mode does this), the intro is skipped entirely. ---------- */
 function runSplash(cfg) {
-  if (!cfg || !cfg.url) return;
+  if (!cfg || !cfg.url) { $('#sv').removeAttribute('src'); $('#sv').load(); return; }
   let seen = false; try { seen = !!sessionStorage.getItem('ri.splashSeen'); } catch {}
   if (seen && cfg.once !== 'always' && !/[?&]splash\b/.test(location.search)) return;
   const sp = $('#splash'), v = $('#sv'), msg = $('#spmsg'), hint = $('#sphint'), muted = cfg.sound === false;
@@ -543,16 +539,14 @@ function runSplash(cfg) {
   sp.onclick = press; document.addEventListener('keydown', onKey);
   hint.textContent = matchMedia('(pointer:coarse)').matches ? 'Tap to skip' : 'Click to skip';
   msg.textContent = 'Loading…'; hint.hidden = false; sp.classList.remove('out'); sp.hidden = false;
-  v.muted = muted; v.src = direct(cfg.url); play();
+  v.muted = muted; const want = new URL(direct(cfg.url), location.href).href; if (v.src !== want) v.src = want; play();
 }
-/* ---------- holo test: glowing audio visualiser around the album art, plus mouse parallax ---------- */
+/* ---------- holo test: 3-line audio visualiser in the playing row, plus mouse parallax ---------- */
 (() => {
-  const N = 18, PAD = 22, GAP = 4, KMAX = 64, EQN = 28;
+  const KMAX = 64;
   const reduced = matchMedia('(prefers-reduced-motion:reduce)').matches, coarse = matchMedia('(pointer:coarse)').matches;
-  const hosts = [...document.querySelectorAll('.npglow')].map(h => { const c = document.createElement('canvas'); c.className = 'viz'; h.prepend(c); return { h, c, g: c.getContext('2d'), w: 0, d: 1 }; });
-  const eqEls = [...document.querySelectorAll('.eq')].flatMap(e => { for (let i = 0; i < EQN; i++) e.appendChild(document.createElement('i')); return [...e.children]; });
-  let mode = 'sim', canReal = false, corsLoaded = false, actx = null, an = null, bins = null, raf = 0, last = 0, quiet = 0;
-  const vals = new Float32Array(N), eqv = new Float32Array(EQN);
+  let mode = 'sim', canReal = false, corsLoaded = false, actx = null, an = null, bins = null, raf = 0, last = 0, quiet = 0, tried = false;
+  const v3 = new Float32Array(3);
   window.__holo = { get mode() { return mode; }, get ctx() { return actx && actx.state; }, get cors() { return corsLoaded; }, get can() { return canReal; } };
 
   const level = (k, t) => {
@@ -560,26 +554,7 @@ function runSplash(cfg) {
     const beat = .55 + .45 * Math.sin(t * 2.4), tone = Math.abs(Math.sin(t * (1.1 + k * .09) + k * 1.9));
     return Math.min(1, (.2 + .8 * tone) * (1 - k / KMAX * .55) * beat);
   };
-  const draw = o => {
-    const { h, c, g } = o;
-    if (h.offsetParent === null || (h.closest('.npw') && !$('#npw').classList.contains('open'))) return;
-    const S = h.offsetWidth, w = S + PAD * 2, d = Math.min(devicePixelRatio || 1, 2);
-    if (o.w !== w || o.d !== d) { c.width = w * d; c.height = w * d; o.w = w; o.d = d; }
-    g.setTransform(d, 0, 0, d, 0, 0); g.clearRect(0, 0, w, w); g.globalCompositeOperation = 'lighter'; g.lineCap = 'round';
-    const step = S / N, th = Math.max(2, step * .5);
-    for (let i = 0; i < N; i++) {
-      const v = vals[i], len = 2 + Math.pow(v, 1.1) * (PAD - GAP - 3), u = PAD + (i + .5) * step, m = Math.abs((i + .5) / N - .5) * 2;
-      const col = `hsl(${150 + m * 40} 90% ${58 + v * 18}%)`;
-      g.strokeStyle = col; g.shadowColor = col; g.shadowBlur = 9 * d; g.lineWidth = th;
-      const e0 = PAD - GAP, e1 = PAD + S + GAP;
-      g.beginPath();
-      g.moveTo(u, e0); g.lineTo(u, e0 - len);   // top
-      g.moveTo(u, e1); g.lineTo(u, e1 + len);   // bottom
-      g.moveTo(e0, u); g.lineTo(e0 - len, u);   // left
-      g.moveTo(e1, u); g.lineTo(e1 + len, u);   // right
-      g.stroke();
-    }
-  };
+  const band = (k0, k1, t) => { let s = 0; for (let k = k0; k < k1; k++) s += level(k, t); return s / (k1 - k0); };
   const frame = now => {
     raf = 0;
     if (coarse && now - last < 33) { raf = requestAnimationFrame(frame); return; }
@@ -588,19 +563,14 @@ function runSplash(cfg) {
       an.getByteFrequencyData(bins);
       if (playing && a.currentTime > 2 && Math.max(...bins) === 0) { if (++quiet > 150) mode = 'sim'; } else quiet = 0;
     }
+    const bars = document.querySelectorAll('.row.on .eqi i'), tg = playing ? [band(0, 4, t), band(4, 14, t), band(14, 40, t)] : [0, 0, 0];
     let peak = 0;
-    for (let i = 0; i < N; i++) {
-      const m = Math.abs((i + .5) / N - .5) * 2, k = Math.floor(Math.pow(m, 1.2) * (KMAX - 1)), tg = playing ? level(k, t) : 0;
-      vals[i] += (tg - vals[i]) * (tg > vals[i] ? .55 : .12); peak = Math.max(peak, vals[i]);
+    for (let j = 0; j < 3; j++) {
+      v3[j] += (tg[j] - v3[j]) * (tg[j] > v3[j] ? .55 : .14); peak = Math.max(peak, v3[j]);
+      if (bars[j]) bars[j].style.transform = `scaleY(${(.18 + v3[j] * .82).toFixed(3)})`;
     }
-    for (let j = 0; j < EQN; j++) {
-      const k = Math.floor(j / (EQN - 1) * (KMAX - 1) * .8), tg = playing ? level(k, t) : 0;
-      eqv[j] += (tg - eqv[j]) * (tg > eqv[j] ? .55 : .12); eqEls[j].style.transform = `scaleY(${(.06 + eqv[j] * .94).toFixed(3)})`;
-    }
-    hosts.forEach(draw);
-    if (playing || peak > .015) raf = requestAnimationFrame(frame);
+    if (playing || peak > .02) raf = requestAnimationFrame(frame);
   };
-  let tried = false;
   const hook = () => {
     if (an || tried || !actx || !canReal || !corsLoaded || actx.state !== 'running') return;
     tried = true;
@@ -614,7 +584,7 @@ function runSplash(cfg) {
   const warm = () => { if (actx || !canReal) return; try { actx = new (window.AudioContext || window.webkitAudioContext)(); actx.resume().then(hook, () => {}); } catch { actx = null; } };
   ['pointerdown', 'keydown'].forEach(t => addEventListener(t, warm, { passive: true }));
   // Real analysis needs the music host to allow cross-origin reads (CORS) and is desktop-only, because routing audio through
-  // Web Audio makes iPhones follow the silent switch. Everywhere else the bars are simulated.
+  // Web Audio makes iPhones follow the silent switch. Everywhere else the lines are simulated.
   const probe = async () => {
     if (coarse || reduced) return;
     if (!all.length) return setTimeout(probe, 150);
