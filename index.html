@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>L1ST3N | Rogue Industries</title>
-<meta name="robots" content="noindex">
+<meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/png" href="RI%20logo%20nobackground.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -132,7 +132,7 @@ body{grid-template:"top top top" auto "side main np" minmax(0,1fr) "bar bar bar"
 .sphint{position:absolute;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));font:400 14px Goldman,sans-serif;color:var(--dim)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
-/* ===== holographic layers (holo test build) ===== */
+/* ===== holographic layers ===== */
 :root{--mx:0;--my:0}
 body{background:radial-gradient(120% 80% at 50% 0%,#07181b 0%,#04090a 55%,#020506 100%)}
 .holo-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
@@ -541,13 +541,12 @@ function runSplash(cfg) {
   msg.textContent = 'Loading…'; hint.hidden = false; sp.classList.remove('out'); sp.hidden = false;
   v.muted = muted; const want = new URL(direct(cfg.url), location.href).href; if (v.src !== want) v.src = want; play();
 }
-/* ---------- holo test: 3-line audio visualiser in the playing row, plus mouse parallax ---------- */
+/* ---------- 3-line audio visualiser in the playing row, plus mouse parallax ---------- */
 (() => {
   const KMAX = 64;
   const reduced = matchMedia('(prefers-reduced-motion:reduce)').matches, coarse = matchMedia('(pointer:coarse)').matches;
   let mode = 'sim', canReal = false, corsLoaded = false, actx = null, an = null, bins = null, raf = 0, last = 0, quiet = 0, tried = false;
   const v3 = new Float32Array(3);
-  window.__holo = { get mode() { return mode; }, get ctx() { return actx && actx.state; }, get cors() { return corsLoaded; }, get can() { return canReal; } };
 
   const level = (k, t) => {
     if (mode === 'real' && bins) return Math.min(1, Math.pow(bins[k] / 255, 1.35) * 1.3);
