@@ -343,7 +343,7 @@ function playFrom(list, i) {
 function start(t, push) {
   if (push && cur) hist.push(cur);
   cur = t; a.src = direct(t.url); a.play().catch(() => {});
-  document.title = t.title + ' – Rogue Industries Music';
+  document.title = t.title + ' - L1ST3N';
   if ('mediaSession' in navigator) navigator.mediaSession.metadata = new MediaMetadata({ title: t.title, artist: t.artist || SITE.artist, album: t.album || ctxName, artwork: t.art ? [{ src: artUrl(t) }] : [] });
   ui(); renderQ();
 }
